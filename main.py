@@ -11,7 +11,7 @@ colorama.init(autoreset=True)
 gameStatus ="playing"
 
 if __name__ == "__main__":
-    map1 = map(20, 20, 0, 0)
-    map1.make_canvas()
-    map1.draw_canvas()
+    map1 = map(30, 90, 0, 0)
+    map1.createMap()
+    map1.drawMap()
 
