@@ -16,13 +16,13 @@ class map:
             row = []
             if i == self.originateY - 1 or i == self.originateX + self.rows:
                 for j in range(self.originateX - 2, self.cols + self.originateY + 2):
-                    row.append(Back.WHITE + " ")
+                    row.append(Back.YELLOW + " ")
             else:
                 for j in range(self.originateX - 2, self.cols + self.originateY + 2):
                     if j == self.originateX -2 or j == self.originateX -1 or j == self.cols + self.originateY + 1 or j == self.cols + self.originateY:
-                        row.append(Back.WHITE + " ")
+                        row.append(Back.YELLOW + " ")
                     else:
-                        row.append(Back.BLACK + " ")
+                        row.append(Back.GREEN + " ")
             self.grid.append(row)
             
     def drawMap(self):
