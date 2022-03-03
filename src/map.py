@@ -5,7 +5,7 @@ from colorama import Fore, Back
 class map:
     grid = []
     
-    def __init__(self, rows, cols, x , y, h, v):
+    def __init__(self, cols, rows, x , y, h, v):
         self.rows = rows
         self.cols = cols
         self.originateX = x
