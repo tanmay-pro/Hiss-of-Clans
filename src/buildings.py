@@ -24,7 +24,7 @@ class building:
             for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
                 if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
                     mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX]
-                    mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j] 
+                    mainMap.grid[i][j] = Back.GREEN + Fore.BLACK + mainMap.grid[i][j] 
             
 
 # Each building below shows inheritance

@@ -1,3 +1,4 @@
+from os import stat
 from map import *
 
 class movingObject:
@@ -39,15 +40,35 @@ class king(movingObject):
         for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
             for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
                 if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":                
-                    mainMap.grid[i][j] = Back.GREEN + " "
-        if pressedKey == "w" and self.currPositionY >= mainMap.originateY + mainMap.verticalBoundary and mainMap.grid[self.currPositionX][self.currPositionY -1] == " ":
-            self.currPositionY -= 1
-        elif pressedKey == "a" and self.currPositionX + 1 >= mainMap.originateX + mainMap.horizontalBoundary:
-            self.currPositionX -= 1
-        elif pressedKey == "d" and self.currPositionX + self.maxWidth + 1 <= mainMap.originateX + mainMap.cols:
-            self.currPositionX += 1
-        elif pressedKey == "s" and self.currPositionY + self.height + 1 <= mainMap.originateY + mainMap.rows and mainMap.grid[self.currPositionX][self.currPositionY + 1 + self.height] == " ":
-            self.currPositionY += 1
+                    mainMap.grid[i][j] = Back.GREEN + Fore.GREEN + " "
+        if pressedKey == "w":
+            status = True
+            for i in range(self.currPositionX + mainMap.horizontalBoundary, self.currPositionX + mainMap.horizontalBoundary + self.maxWidth):
+                if mainMap.grid[mainMap.verticalBoundary + self.currPositionY - 1][i] != Back.GREEN + Fore.GREEN + " ":
+                    status = False
+            if status:
+                self.currPositionY -= 1
+        elif pressedKey == "a":
+            status = True
+            for i in range(self.currPositionY + mainMap.verticalBoundary, self.currPositionY + mainMap.verticalBoundary + self.height):
+                if mainMap.grid[i][self.currPositionX + mainMap.horizontalBoundary - 1] != Back.GREEN + Fore.GREEN + " ":
+                    status = False
+            if status:
+                self.currPositionX -= 1
+        elif pressedKey == "d":
+            status = True
+            for i in range(self.currPositionY + mainMap.verticalBoundary, self.currPositionY + mainMap.verticalBoundary + self.height):
+                if mainMap.grid[i][self.currPositionX + mainMap.horizontalBoundary + self.maxWidth] != Back.GREEN + Fore.GREEN + " ":
+                    status = False
+            if status:
+                self.currPositionX += 1
+        elif pressedKey == "s":
+            status = True
+            for i in range(self.currPositionX + mainMap.horizontalBoundary, self.currPositionX + mainMap.horizontalBoundary + self.maxWidth):
+                if mainMap.grid[mainMap.verticalBoundary + self.currPositionY + self.height][i] != Back.GREEN + Fore.GREEN + " ":
+                    status = False
+            if status:
+                self.currPositionY += 1
         self.updatePosition(mainMap)
     
     def updatePosition(self, mainMap):

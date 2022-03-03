@@ -5,29 +5,27 @@ from colorama import Fore, Back
 class map:
     grid = []
     
-    def __init__(self, cols, rows, x , y, h, v):
+    def __init__(self, cols, rows, h, v):
         self.rows = rows
         self.cols = cols
-        self.originateX = x
-        self.originateY = y
         self.horizontalBoundary = h
         self.verticalBoundary = v
     
     def createMap(self):
-        for i in range(self.originateY, self.originateY + 2 * self.verticalBoundary + self.rows):
+        for i in range(0, 2 * self.verticalBoundary + self.rows):
             row = []
-            if i < self.originateY + self.verticalBoundary:
-                for j in range(self.originateX, self.originateX + 2 * self.horizontalBoundary + self.cols): 
-                    row.append(Back.YELLOW + " ")
-            elif i >= self.originateY + self.verticalBoundary + self.rows:
-                for j in range(self.originateX, self.originateX + 2 * self.horizontalBoundary + self.cols):
-                    row.append(Back.YELLOW + " ")
+            if i < 0 + self.verticalBoundary:
+                for j in range(0, 2 * self.horizontalBoundary + self.cols): 
+                    row.append(Back.YELLOW + Fore.YELLOW +" ")
+            elif i >= 0 + self.verticalBoundary + self.rows:
+                for j in range(0, 2 * self.horizontalBoundary + self.cols):
+                    row.append(Back.YELLOW + Fore.YELLOW + " ")
             else:
-                for j in range(self.originateX, self.originateX + 2 * self.horizontalBoundary + self.cols):
-                    if j < self.originateX + self.horizontalBoundary or j >= self.originateX + self.horizontalBoundary + self.cols:
-                        row.append(Back.YELLOW + " ")
+                for j in range(0, 2 * self.horizontalBoundary + self.cols):
+                    if j < 0 + self.horizontalBoundary or j >= 0 + self.horizontalBoundary + self.cols:
+                        row.append(Back.YELLOW + Fore.YELLOW + " ")
                     else:
-                        row.append(Back.GREEN + " ")
+                        row.append(Back.GREEN + Fore.GREEN + " ")
             self.grid.append(row)
             
     def drawMap(self):

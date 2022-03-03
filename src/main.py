@@ -19,7 +19,7 @@ if __name__ == "__main__":
     orig_settings = termios.tcgetattr(sys.stdin)
     tty.setcbreak(sys.stdin)
     
-    mainMap = map(160, 40, 0, 0, 2, 1)
+    mainMap = map(120, 30, 2, 1)
     mainMap.createMap()
 
     mainKing = king(0, 0, 100, 1, 3)
