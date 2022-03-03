@@ -35,6 +35,26 @@ if __name__ == "__main__":
     mainTownHall.assignmaxWidth(maxWidthTexture)
     mainTownHall.assignTexture(texture)
     mainTownHall.assignInitialPosition(mainMap)
+    
+    arrayHuts = []
+    hut1 = hut(10, 10, 100)
+    hut2 = hut(20, 10, 100)
+    hut3 = hut(10, 15, 100)
+    hut4 = hut(20, 15, 100)
+    hut5 = hut(20, 20, 100)
+    arrayHuts.append(hut1)
+    arrayHuts.append(hut2)
+    arrayHuts.append(hut3)        
+    arrayHuts.append(hut4)    
+    arrayHuts.append(hut5)    
+    texture, heightTexture, maxWidthTexture = getTexture("../textures/hut.txt")
+    for hut in arrayHuts:
+        hut.assignHeight(heightTexture)
+        hut.assignmaxWidth(maxWidthTexture)
+        hut.assignTexture(texture)
+        hut.assignInitialPosition(mainMap) 
+    
+    arrayWalls = []
 
     mainMap.drawMap()
     
