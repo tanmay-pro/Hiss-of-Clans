@@ -4,22 +4,24 @@ from colorama import Fore, Back
 
 class map:
     grid = []
-
-    def __init__(self, rows, cols, x , y):
+    
+    def __init__(self, rows, cols, x , y, h, v):
         self.rows = rows
         self.cols = cols
         self.originateX = x
         self.originateY = y
+        self.horizontalBoundary = h
+        self.verticalBoundary = v
     
     def createMap(self):
-        for i in range(self.originateY -1, self.rows + self.originateX + 1):
+        for i in range(self.originateY - self.verticalBoundary, self.rows + self.originateX + self.verticalBoundary):
             row = []
-            if i == self.originateY - 1 or i == self.originateX + self.rows:
-                for j in range(self.originateX - 2, self.cols + self.originateY + 2):
+            if i == self.originateY - self.verticalBoundary or i == self.originateX + self.rows:
+                for j in range(self.originateX - self.horizontalBoundary, self.cols + self.originateY + self.horizontalBoundary):
                     row.append(Back.YELLOW + " ")
             else:
-                for j in range(self.originateX - 2, self.cols + self.originateY + 2):
-                    if j == self.originateX -2 or j == self.originateX -1 or j == self.cols + self.originateY + 1 or j == self.cols + self.originateY:
+                for j in range(self.originateX - self.horizontalBoundary, self.cols + self.originateY + self.horizontalBoundary):
+                    if j == self.originateX - self.horizontalBoundary or j == self.originateX - self.verticalBoundary or j == self.cols + self.originateY + self.verticalBoundary or j == self.cols + self.originateY:
                         row.append(Back.YELLOW + " ")
                     else:
                         row.append(Back.GREEN + " ")
