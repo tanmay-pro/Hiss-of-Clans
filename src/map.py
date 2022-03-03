@@ -14,14 +14,17 @@ class map:
         self.verticalBoundary = v
     
     def createMap(self):
-        for i in range(self.originateY - self.verticalBoundary, self.rows + self.originateX + self.verticalBoundary):
+        for i in range(self.originateY, self.originateY + 2 * self.verticalBoundary + self.rows):
             row = []
-            if i == self.originateY - self.verticalBoundary or i == self.originateX + self.rows:
-                for j in range(self.originateX - self.horizontalBoundary, self.cols + self.originateY + self.horizontalBoundary):
+            if i < self.originateY + self.verticalBoundary:
+                for j in range(self.originateX, self.originateX + 2 * self.horizontalBoundary + self.cols): 
+                    row.append(Back.YELLOW + " ")
+            elif i >= self.originateY + self.verticalBoundary + self.rows:
+                for j in range(self.originateX, self.originateX + 2 * self.horizontalBoundary + self.cols):
                     row.append(Back.YELLOW + " ")
             else:
-                for j in range(self.originateX - self.horizontalBoundary, self.cols + self.originateY + self.horizontalBoundary):
-                    if j == self.originateX - self.horizontalBoundary or j == self.originateX - self.verticalBoundary or j == self.cols + self.originateY + self.verticalBoundary or j == self.cols + self.originateY:
+                for j in range(self.originateX, self.originateX + 2 * self.horizontalBoundary + self.cols):
+                    if j < self.originateX + self.horizontalBoundary or j >= self.originateX + self.horizontalBoundary + self.cols:
                         row.append(Back.YELLOW + " ")
                     else:
                         row.append(Back.GREEN + " ")

@@ -27,13 +27,15 @@ class king(movingObject):
     def assignInitialPosition(self, mainMap, kingTexture):
         for i in range(mainMap.verticalBoundary + self.startPositionY, self.height + mainMap.verticalBoundary + self.startPositionY):
             for j in range(mainMap.horizontalBoundary + self.startPositionX, len(kingTexture[i - mainMap.verticalBoundary - self.startPositionY]) + mainMap.horizontalBoundary + self.startPositionX):
-                mainMap.grid[i][j] = kingTexture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX]
-                mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j] 
-
+                if kingTexture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX] != "\n":
+                    mainMap.grid[i][j] = kingTexture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX]
+                    mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j] 
+    
     def move(self, pressedKey, mainMap, kingTexture):
         for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
             for j in range(mainMap.horizontalBoundary + self.currPositionX, len(kingTexture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
-                mainMap.grid[i][j] = Back.GREEN + " "
+                if kingTexture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":                
+                    mainMap.grid[i][j] = Back.GREEN + " "
         if pressedKey == "w" and self.currPositionY >= mainMap.originateY + mainMap.verticalBoundary:
             self.currPositionY -= 1
         elif pressedKey == "a" and self.currPositionX + 1 >= mainMap.originateX + mainMap.horizontalBoundary:
@@ -47,8 +49,9 @@ class king(movingObject):
     def updatePosition(self, mainMap, kingTexture):
         for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
             for j in range(mainMap.horizontalBoundary + self.currPositionX, len(kingTexture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
-                mainMap.grid[i][j] = kingTexture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
-                mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j] 
+                if kingTexture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":     
+                    mainMap.grid[i][j] = kingTexture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
+                    mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j] 
         
         
 
