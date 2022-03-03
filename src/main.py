@@ -13,7 +13,7 @@ colorama.init(autoreset=True)
 gameStatus = "playing"
 
 if __name__ == "__main__":
-    mainMap = map(20, 90, 0, 0, 2, 1)
+    mainMap = map(35, 150, 0, 0, 2, 1)
     mainMap.createMap()
     mainKing = king(0, 0, 100, 1, 3)
     texture, heightTexture, maxWidthTexture = getTexture("../textures/king.txt")
