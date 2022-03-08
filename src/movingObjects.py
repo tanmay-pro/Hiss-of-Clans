@@ -1,5 +1,6 @@
 from os import stat
 from map import *
+from others import *
 
 class movingObject:
     isdead = False
@@ -30,7 +31,29 @@ class movingObject:
                 if self.texture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX] != "\n":
                     mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX]
                     mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j] 
-        
+
+    def attack(self, mainMap, direction, townHall, huts, walls, cannons):
+        attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
+        if direction == 0:
+            attackX += 1
+        elif direction == 1:
+            attackY += 1
+        elif direction == 2:
+            attackX -= 1
+        elif direction == 3:
+            attackY -= 1
+        if townHall.checkUnit(mainMap, attackX, attackY):   
+            townHall.currHealth = 0
+            townHall.deductHealth(self.damage)
+        for everyHut in huts:
+            if everyHut.checkUnit(mainMap, attackX, attackY):
+                everyHut.deductHealth(self.damage)
+        for everyWall in walls:
+            if everyWall.checkUnit(mainMap, attackX, attackY):
+                everyWall.deductHealth(self.damage)
+        for everyCannon in cannons:
+            if everyCannon.checkUnit(mainMap, attackX, attackY):
+                everyCannon.deductHealth(self.damage)        
 
 class king(movingObject): 
     def __init__(self, startX, startY, health, speed, damage):
@@ -69,6 +92,7 @@ class king(movingObject):
                     status = False
             if status:
                 self.currPositionY += 1
+                   
         self.updatePosition(mainMap)
     
     def updatePosition(self, mainMap):
@@ -77,8 +101,6 @@ class king(movingObject):
                 if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":     
                     mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
                     mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j] 
-        
-        
 
 class barabarian(movingObject):
     def __init__(self, startX, startY, health, speed, damage):
