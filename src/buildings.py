@@ -39,6 +39,8 @@ class building:
 
     def deductHealth(self, damage):
         self.currHealth -= damage                
+        if self.currhealth <= 0:
+            self.isDestroyed = True
 
 # Each building below shows inheritance
 class cannon(building): 

@@ -95,8 +95,6 @@ if __name__ == "__main__":
             gameStatus = "quit"
         elif ch == " ":
             mainKing.attack(mainMap,0, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
-        elif ch=="-":
-            mainKing.deductHealth(10)
         sys.stdin.flush()
         sys.stdout.flush()
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)
