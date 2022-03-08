@@ -1,9 +1,11 @@
+from re import S
 import numpy as np
 import colorama
 from colorama import Fore, Back
 
 class map:
     grid = []
+    # backGrid = []
     
     def __init__(self, cols, rows, h, v):
         self.rows = rows
@@ -14,19 +16,25 @@ class map:
     def createMap(self):
         for i in range(0, 2 * self.verticalBoundary + self.rows):
             row = []
+            # backRow = []
             if i < 0 + self.verticalBoundary:
                 for j in range(0, 2 * self.horizontalBoundary + self.cols): 
                     row.append(Back.YELLOW + Fore.YELLOW +" ")
+                    # backRow.append(" ")
             elif i >= 0 + self.verticalBoundary + self.rows:
                 for j in range(0, 2 * self.horizontalBoundary + self.cols):
                     row.append(Back.YELLOW + Fore.YELLOW + " ")
+                    # backRow.append(" ")
             else:
                 for j in range(0, 2 * self.horizontalBoundary + self.cols):
                     if j < 0 + self.horizontalBoundary or j >= 0 + self.horizontalBoundary + self.cols:
                         row.append(Back.YELLOW + Fore.YELLOW + " ")
+                        # backRow.append(" ")                   
                     else:
                         row.append(Back.GREEN + Fore.GREEN + " ")
+                        # backRow.append(" ")
             self.grid.append(row)
+            # self.backGrid.append(row)
             
     def drawMap(self):
         printMap = ""
@@ -35,4 +43,3 @@ class map:
                 printMap += self.grid[r][c]
             printMap += '\n'    
         print('\033[H' + printMap)
-

@@ -42,9 +42,9 @@ if __name__ == "__main__":
     arrayHuts = []
     texture, heightTexture, maxWidthTexture = getTexture("../textures/hut.txt")
     for i in range(0, NUMBER_HUTS_IN_ROW):
-        arrayHuts.append(hut(HUT_STARTING1, 10 + 6*i, 100))
+        arrayHuts.append(hut(HUT_STARTING1, HUT_STARTINGY + 6*i, 100))
     for i in range(0, NUMBER_HUTS_IN_ROW):
-        arrayHuts.append(hut(HUT_STARTING2, 10 + 6*i, 100))
+        arrayHuts.append(hut(HUT_STARTING2, HUT_STARTINGY + 6*i, 100))
     for Hut in arrayHuts:
         Hut.assignHeight(heightTexture)
         Hut.assignmaxWidth(maxWidthTexture)
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     while gameStatus == "playing":
         os.system("cls" if os.name == "nt" else "clear")
         mainMap.drawMap()
-        print(mainTownHall.currHealth)
+        mainKing.displayHealth()
         ch = input_to(Get())
         if ch == "w" or ch == "a" or ch == "s" or ch == "d":
             mainKing.move(ch, mainMap)
@@ -95,6 +95,8 @@ if __name__ == "__main__":
             gameStatus = "quit"
         elif ch == " ":
             mainKing.attack(mainMap,0, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+        elif ch=="-":
+            mainKing.deductHealth(10)
         sys.stdin.flush()
         sys.stdout.flush()
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)

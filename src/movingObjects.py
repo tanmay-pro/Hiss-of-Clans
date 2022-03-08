@@ -54,6 +54,11 @@ class movingObject:
         for everyCannon in cannons:
             if everyCannon.checkUnit(mainMap, attackX, attackY):
                 everyCannon.deductHealth(self.damage)        
+    
+    def deductHealth(self, damage):
+        self.currHealth -= damage
+        if self.currHealth <= 0:
+            self.isdead = True 
 
 class king(movingObject): 
     def __init__(self, startX, startY, health, speed, damage):
@@ -101,6 +106,30 @@ class king(movingObject):
                 if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":     
                     mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
                     mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j] 
+
+    def displayHealth(self):
+        blocks = int(self.currHealth / 10)
+        healthBar = []
+        if blocks > 0 and blocks <= 2:
+            for i in range(blocks):
+                healthBar.append(Fore.RED + Back.RED + " ")
+        if blocks > 2 and blocks <= 5:
+            for i in range(2):
+                healthBar.append(Fore.RED + Back.RED + " ")
+            for i in range(blocks-2):
+                healthBar.append(Fore.YELLOW + Back.YELLOW + " ")
+        if blocks > 5:
+            for i in range(2):
+                healthBar.append(Fore.RED + Back.RED + " ")
+            for i in range(5):
+                healthBar.append(Fore.YELLOW + Back.YELLOW + " ")    
+            for i in range(blocks-5):
+                healthBar.append(Fore.GREEN + Back.GREEN + " ")
+        printMap = ""
+        for r in range(len(healthBar)):
+            printMap += healthBar[r]
+        print(printMap)
+        print("King Health = " + str(self.currHealth))
 
 class barabarian(movingObject):
     def __init__(self, startX, startY, health, speed, damage):
