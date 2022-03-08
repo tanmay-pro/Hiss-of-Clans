@@ -42,9 +42,9 @@ if __name__ == "__main__":
     arrayHuts = []
     texture, heightTexture, maxWidthTexture = getTexture("../textures/hut.txt")
     for i in range(0, NUMBER_HUTS_IN_ROW):
-        arrayHuts.append(hut(HUT_STARTING1, HUT_STARTINGY + 6*i, 100))
+        arrayHuts.append(hut(HUT_STARTING1, HUT_STARTINGY + 6*i, HUT_HEALTH))
     for i in range(0, NUMBER_HUTS_IN_ROW):
-        arrayHuts.append(hut(HUT_STARTING2, HUT_STARTINGY + 6*i, 100))
+        arrayHuts.append(hut(HUT_STARTING2, HUT_STARTINGY + 6*i, HUT_HEALTH))
     for Hut in arrayHuts:
         Hut.assignHeight(heightTexture)
         Hut.assignmaxWidth(maxWidthTexture)
@@ -55,13 +55,13 @@ if __name__ == "__main__":
     texture, heightTexture, maxWidthTexture = getTexture(
         "../textures/wall.txt")
     for i in range(0, NUMBER_WALLS_Y):
-        arrayWalls.append(wall(WALL_STARTING1X, WALL_STARTING1Y + i, 100))
+        arrayWalls.append(wall(WALL_STARTING1X, WALL_STARTING1Y + i, WALL_HEALTH))
     for i in range(0, NUMBER_WALLS_Y):
-        arrayWalls.append(wall(WALL_STARTING2X, WALL_STARTING1Y + i, 100))
+        arrayWalls.append(wall(WALL_STARTING2X, WALL_STARTING1Y + i, WALL_HEALTH))
     for i in range(0, NUMBER_WALLS_X):
-        arrayWalls.append(wall(WALL_STARTING1X + i, WALL_STARTING1Y, 100))
+        arrayWalls.append(wall(WALL_STARTING1X + i, WALL_STARTING1Y, WALL_HEALTH))
     for i in range(0, NUMBER_WALLS_X):
-        arrayWalls.append(wall(WALL_STARTING1X + i, WALL_STARTING2Y, 100))
+        arrayWalls.append(wall(WALL_STARTING1X + i, WALL_STARTING2Y, WALL_HEALTH))
 
     for Wall in arrayWalls:
         Wall.assignHeight(heightTexture)
@@ -88,13 +88,14 @@ if __name__ == "__main__":
         os.system("cls" if os.name == "nt" else "clear")
         mainMap.drawMap()
         mainKing.displayHealth()
+        print(mainTownHall.currHealth)
         ch = input_to(Get())
         if ch == "w" or ch == "a" or ch == "s" or ch == "d":
             mainKing.move(ch, mainMap)
         elif ch == "q":
             gameStatus = "quit"
         elif ch == " ":
-            mainKing.attack(mainMap,0, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+            mainKing.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
         sys.stdin.flush()
         sys.stdout.flush()
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)

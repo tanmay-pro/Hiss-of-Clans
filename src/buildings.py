@@ -30,18 +30,29 @@ class building:
         present = False
         for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
             for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
-                if i==posY and j==posX:
+                if i==posY + mainMap.verticalBoundary and j==posX + mainMap.horizontalBoundary:
                     present = True
         if present:
             return True
         else:
             return False
 
-    def deductHealth(self, damage):
-        self.currHealth -= damage                
-        if self.currhealth <= 0:
+    def deductHealth(self, damage, mainMap):
+        self.currHealth -= damage
+        self.checkDestroy(mainMap) 
+    
+    def checkDestroy(self, mainMap):                   
+        if self.currHealth <= 0:
             self.isDestroyed = True
-
+            self.destroy(mainMap)
+    
+    def destroy(self, mainMap):
+        for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
+            for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
+                if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
+                    mainMap.grid[i][j] = Back.GREEN + Fore.GREEN + " "
+        
+        
 # Each building below shows inheritance
 class cannon(building): 
     def __init__(self, x, y, hitpoints, damage, range):

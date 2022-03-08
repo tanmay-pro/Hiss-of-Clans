@@ -32,35 +32,15 @@ class movingObject:
                     mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX]
                     mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j] 
 
-    def attack(self, mainMap, direction, townHall, huts, walls, cannons):
-        attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
-        if direction == 0:
-            attackX += 1
-        elif direction == 1:
-            attackY += 1
-        elif direction == 2:
-            attackX -= 1
-        elif direction == 3:
-            attackY -= 1
-        if townHall.checkUnit(mainMap, attackX, attackY):   
-            townHall.currHealth = 0
-            townHall.deductHealth(self.damage)
-        for everyHut in huts:
-            if everyHut.checkUnit(mainMap, attackX, attackY):
-                everyHut.deductHealth(self.damage)
-        for everyWall in walls:
-            if everyWall.checkUnit(mainMap, attackX, attackY):
-                everyWall.deductHealth(self.damage)
-        for everyCannon in cannons:
-            if everyCannon.checkUnit(mainMap, attackX, attackY):
-                everyCannon.deductHealth(self.damage)        
-    
     def deductHealth(self, damage):
         self.currHealth -= damage
         if self.currHealth <= 0:
             self.isdead = True 
 
 class king(movingObject): 
+    
+    previousMove = None
+    
     def __init__(self, startX, startY, health, speed, damage):
         super().__init__(startX, startY, health, speed, damage)
     
@@ -69,6 +49,7 @@ class king(movingObject):
             for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
                 if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":                
                     mainMap.grid[i][j] = Back.GREEN + Fore.GREEN + " "
+        self.previousMove = pressedKey
         if pressedKey == "w":
             status = True
             for i in range(self.currPositionX + mainMap.horizontalBoundary, self.currPositionX + mainMap.horizontalBoundary + self.maxWidth):
@@ -106,6 +87,32 @@ class king(movingObject):
                 if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":     
                     mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
                     mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j] 
+
+    def attack(self, mainMap, townHall, huts, walls, cannons):
+        # attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
+        attackX = self.currPositionX
+        attackY = self.currPositionY
+        
+        if self.previousMove == "d":
+            attackX += 1
+        elif self.previousMove == "s":
+            attackY += 1
+        elif self.previousMove == "a":
+            attackX -= 1
+        elif self.previousMove == "w":
+            attackY -= 1
+        if townHall.checkUnit(mainMap, attackX, attackY):   
+            townHall.deductHealth(self.damage, mainMap)
+        for everyHut in huts:
+            if everyHut.checkUnit(mainMap, attackX, attackY):
+                everyHut.deductHealth(self.damage, mainMap)
+        for everyWall in walls:
+            if everyWall.checkUnit(mainMap, attackX, attackY):
+                everyWall.deductHealth(self.damage, mainMap)
+        for everyCannon in cannons:
+            if everyCannon.checkUnit(mainMap, attackX, attackY):
+                everyCannon.deductHealth(self.damage, mainMap)        
+        
 
     def displayHealth(self):
         blocks = int(self.currHealth / 10)
