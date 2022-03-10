@@ -30,7 +30,7 @@ class movingObject:
             for j in range(mainMap.horizontalBoundary + self.startPositionX, len(self.texture[i - mainMap.verticalBoundary - self.startPositionY]) + mainMap.horizontalBoundary + self.startPositionX):
                 if self.texture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX] != "\n":
                     mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX]
-                    mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j] 
+                    mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j] 
 
     def deductHealth(self, damage):
         self.currHealth -= damage
@@ -86,7 +86,7 @@ class king(movingObject):
             for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
                 if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":     
                     mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
-                    mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j] 
+                    mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j] 
 
     def attack(self, mainMap, townHall, huts, walls, cannons):
         # attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
@@ -115,7 +115,7 @@ class king(movingObject):
         
 
     def displayHealth(self):
-        blocks = int(self.currHealth / 10)
+        blocks = int(self.currHealth / self.fullhealth * 10)
         healthBar = []
         if blocks > 0 and blocks <= 2:
             for i in range(blocks):
@@ -138,6 +138,6 @@ class king(movingObject):
         print(printMap)
         print("King Health = " + str(self.currHealth))
 
-class barabarian(movingObject):
+class barbarian(movingObject):
     def __init__(self, startX, startY, health, speed, damage):
         super().__init__(startX, startY, health, speed, damage)

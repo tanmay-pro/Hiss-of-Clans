@@ -1,3 +1,4 @@
+from multiprocessing.spawn import spawn_main
 import numpy as np
 import colorama
 import time
@@ -83,12 +84,18 @@ if __name__ == "__main__":
         Cannon.assignPosition(mainMap)
 
     mainMap.drawMap()
+    
+    sp1 = spawningPoint(10, 10)
+    sp2 = spawningPoint(10, 20)
+    sp3 = spawningPoint(10, 30)
+    
+    arrayBarbarians = []
+    texture, heightTexture, maxWidthTexture = getTexture("../textures/barbarian.txt")
 
     while gameStatus == "playing":
         os.system("cls" if os.name == "nt" else "clear")
         mainMap.drawMap()
         mainKing.displayHealth()
-        print(mainTownHall.currHealth)
         ch = input_to(Get())
         if ch == "w" or ch == "a" or ch == "s" or ch == "d":
             mainKing.move(ch, mainMap)
@@ -96,6 +103,27 @@ if __name__ == "__main__":
             gameStatus = "quit"
         elif ch == " ":
             mainKing.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+        elif ch == "1":
+            barbarian1 = barbarian(sp1.positionX, sp1.positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
+            arrayBarbarians.push(barbarian1)
+            barbarian1.assignHeight(heightTexture)
+            barbarian1.assignmaxWidth(maxWidthTexture)
+            barbarian1.assignTexture(texture)
+            barbarian1.assignInitialPosition(mainMap)        
+        elif ch== "2":
+            barbarian2 = barbarian(sp2.positionX, sp2.positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
+            arrayBarbarians.push(barbarian2)
+            barbarian2.assignHeight(heightTexture)
+            barbarian2.assignmaxWidth(maxWidthTexture)
+            barbarian2.assignTexture(texture)
+            barbarian2.assignInitialPosition(mainMap)
+        elif ch== "3":
+            barbarian3 = barbarian(sp3.positionX, sp3.positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
+            arrayBarbarians.push(barbarian3)
+            barbarian3.assignHeight(heightTexture)
+            barbarian3.assignmaxWidth(maxWidthTexture)
+            barbarian3.assignTexture(texture)
+            barbarian3.assignInitialPosition(mainMap)
         sys.stdin.flush()
         sys.stdout.flush()
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)

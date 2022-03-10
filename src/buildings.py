@@ -39,6 +39,7 @@ class building:
 
     def deductHealth(self, damage, mainMap):
         self.currHealth -= damage
+        self.changeColor(mainMap)
         self.checkDestroy(mainMap) 
     
     def checkDestroy(self, mainMap):                   
@@ -51,7 +52,30 @@ class building:
             for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
                 if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
                     mainMap.grid[i][j] = Back.GREEN + Fore.GREEN + " "
-        
+    
+    def changeColor(self, mainMap):
+        blocks = int(self.currHealth/self.fullHealth* 10)
+        if blocks <= 2:
+            for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
+                for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
+                    if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
+                        mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX]
+                        mainMap.grid[i][j] = Back.RED + Fore.BLACK + mainMap.grid[i][j]
+    
+        if blocks <= 5 and blocks > 2:
+            for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
+                for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
+                    if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
+                        mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX]
+                        mainMap.grid[i][j] = Back.YELLOW + Fore.BLACK + mainMap.grid[i][j]
+
+        if blocks <= 10 and blocks > 5:
+            for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
+                for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
+                    if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
+                        mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX]
+                        mainMap.grid[i][j] = Back.GREEN + Fore.BLACK + mainMap.grid[i][j]  
+                
         
 # Each building below shows inheritance
 class cannon(building): 
