@@ -90,6 +90,24 @@ class cannon(building):
         self.damage = damage
         self.range = range
 
+    def attack(self, mainMap, mainKing, arrayBarbarians):
+        attackX = self.positionX + mainMap.horizontalBoundary + 1
+        attackY = self.positionY + mainMap.verticalBoundary + 1
+        attackKing = False
+        if not mainKing.isDead:
+            distance = math.sqrt((attackX - mainKing.currPositionX)**2 + (attackY - mainKing.currPositionY)**2)
+            if distance <= self.range:
+                mainKing.deductHealth(self.damage, mainMap)
+                attackKing = True
+        if not attackKing:
+            for i in range(len(arrayBarbarians)):
+                if not arrayBarbarians[i].isDead:
+                    distance = math.sqrt((attackX - arrayBarbarians[i].currPositionX)**2 + (attackY - arrayBarbarians[i].currPositionY)**2)
+                    if distance <= self.range:
+                        arrayBarbarians[i].deductHealth(self.damage, mainMap)
+                        break
+
+
 class wall(building):
     def __init__(self, x, y, hitpoints):
         super().__init__(x, y, hitpoints) # w and h should both be 1

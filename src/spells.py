@@ -3,3 +3,4 @@ class spell:
         self.damageEffect = damageEffect
         self.speedEffect = speedEffect
         self.healthEffect = healthEffect
+    

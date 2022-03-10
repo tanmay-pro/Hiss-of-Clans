@@ -1,6 +1,5 @@
 from os import stat
-
-from black import main
+from spells import *
 from map import *
 import math
 from others import *
@@ -85,6 +84,12 @@ class movingObject:
                 if everyCannon.checkUnit(mainMap, attackX, attackY):
                     everyCannon.deductHealth(self.damage, mainMap)        
     
+    def castSpell(self, cast):
+        self.damage *= cast.damageEffect
+        self.movSpeed *= cast.speedEffect
+        self.currHealth *= cast.healthEffect
+        if(self.currHealth > self.fullhealth):
+            self.currHealth = self.fullhealth
 
 class king(movingObject):     
 
