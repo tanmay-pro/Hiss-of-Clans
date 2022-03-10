@@ -97,6 +97,8 @@ if __name__ == "__main__":
         os.system("cls" if os.name == "nt" else "clear")
         mainMap.drawMap()
         mainKing.displayHealth()
+        for everyBarbarian in arrayBarbarians:
+            everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
         ch = input_to(Get())
         if ch == "w" or ch == "a" or ch == "s" or ch == "d":
             mainKing.move(ch, mainMap)
@@ -125,8 +127,6 @@ if __name__ == "__main__":
             barbarian3.assignmaxWidth(maxWidthTexture)
             barbarian3.assignTexture(texture)
             barbarian3.assignInitialPosition(mainMap)
-        for everyBarbarian in arrayBarbarians:
-            everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
         sys.stdin.flush()
         sys.stdout.flush()
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)

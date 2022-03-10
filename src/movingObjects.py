@@ -1,4 +1,6 @@
 from os import stat
+
+from black import main
 from map import *
 import math
 from others import *
@@ -33,10 +35,11 @@ class movingObject:
                     mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX]
                     mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j] 
 
-    def deductHealth(self, damage):
+    def deductHealth(self, damage, mainMap):
         self.currHealth -= damage
         if self.currHealth <= 0:
-            self.isdead = True 
+            self.isdead = True
+            self.clearObject(mainMap) 
 
     def updatePosition(self, mainMap):
         for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
@@ -44,20 +47,22 @@ class movingObject:
                 if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":     
                     mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
                     mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j] 
+
+    def clearObject(self, mainMap):
+        for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
+            for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
+                if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
+                    mainMap.grid[i][j] = Back.GREEN + Fore.GREEN + " "
     
 
-class king(movingObject): 
-    
+class king(movingObject):     
     previousMove = None
     
     def __init__(self, startX, startY, health, speed, damage):
         super().__init__(startX, startY, health, speed, damage)
     
     def move(self, pressedKey, mainMap):
-        for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
-            for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
-                if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":                
-                    mainMap.grid[i][j] = Back.GREEN + Fore.GREEN + " "
+        self.clearObject(mainMap)
         self.previousMove = pressedKey
         if pressedKey == "w":
             status = True
@@ -87,7 +92,7 @@ class king(movingObject):
                     status = False
             if status:
                 self.currPositionY += 1
-                   
+
         self.updatePosition(mainMap)
 
     def attack(self, mainMap, townHall, huts, walls, cannons):
@@ -149,26 +154,26 @@ class barbarian(movingObject):
         townHall.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
         for everyHut in huts:
             everyHut.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
-        for everyWall in walls:
-            everyWall.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
         for everyCannon in cannons:
             everyCannon.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
         minDist = 1e7; minDistX = -1; minDistY = -1
 
-        # for i in range(dist):
-        #     for j in range(dist[i]):
-        #         if dist[i][j] < minDist:
-        #             minDistX = i; minDistY = j
-        # self.decideDirection(mainMap ,minDistX, minDistY)
-        print(dist)
+        for key, value in dist.items():
+            if value < minDist:
+                minDist = value
+                array = key.split(".")
+                minDistY = int(array[0])
+                minDistX = int(array[1])
+        self.decideDirection(mainMap ,minDistX, minDistY)
         
     def decideDirection(self, mainMap, posX, posY):
-        possibleX= {self.currPositionX, self.currPositionX + 1, self.currPositionX - 1}
-        possibleY = {self.currPositionY, self.currPositionY + 1, self.currPositionY - 1}
-        minDist = 1e7; minDistX = -1; minDistY = -1
-        for i in range(possibleX):
-            for j in range(possibleY):
-                if math.sqrt((i - posX)**2 + (j - posY)**2) < minDist:
-                    minDistX = i; minDistY = j
-        self.currPositionX = minDistX; self.currPositionY = minDistY
+        self.clearObject(mainMap)      
+        if posX > self.currPositionX + mainMap.horizontalBoundary and mainMap.grid[self.currPositionY + mainMap.verticalBoundary][self.currPositionX + mainMap.horizontalBoundary + self.maxWidth] == Back.GREEN + Fore.GREEN + " ":
+            self.currPositionX += 1
+        elif posX < self.currPositionX + mainMap.horizontalBoundary and mainMap.grid[self.currPositionY + mainMap.verticalBoundary][self.currPositionX + mainMap.horizontalBoundary - 1] == Back.GREEN + Fore.GREEN + " ":
+            self.currPositionX -= 1
+        if posY > self.currPositionY + mainMap.verticalBoundary and mainMap.grid[self.currPositionY + mainMap.verticalBoundary + self.height][self.currPositionX + mainMap.horizontalBoundary] == Back.GREEN + Fore.GREEN + " ":
+            self.currPositionY += 1
+        elif posY < self.currPositionY + mainMap.verticalBoundary and mainMap.grid[self.currPositionY + mainMap.verticalBoundary - 1][self.currPositionX + mainMap.horizontalBoundary] == Back.GREEN + Fore.GREEN + " ":
+            self.currPositionY -= 1
         self.updatePosition(mainMap)
