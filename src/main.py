@@ -98,8 +98,9 @@ if __name__ == "__main__":
         mainMap.drawMap()
         mainKing.displayHealth()
         for everyBarbarian in arrayBarbarians:
-            everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
-            everyBarbarian.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+            if not everyBarbarian.isDead: 
+                everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+                everyBarbarian.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
         ch = input_to(Get())
         if ch == "w" or ch == "a" or ch == "s" or ch == "d":
             mainKing.move(ch, mainMap)

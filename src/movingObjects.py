@@ -72,14 +72,17 @@ class movingObject:
         if townHall.checkUnit(mainMap, attackX, attackY):   
             townHall.deductHealth(self.damage, mainMap)
         for everyHut in huts:
-            if everyHut.checkUnit(mainMap, attackX, attackY):
-                everyHut.deductHealth(self.damage, mainMap)
+            if not everyHut.destroyed:
+                if everyHut.checkUnit(mainMap, attackX, attackY):
+                    everyHut.deductHealth(self.damage, mainMap)
         for everyWall in walls:
-            if everyWall.checkUnit(mainMap, attackX, attackY):
-                everyWall.deductHealth(self.damage, mainMap)
+            if not everyWall.destroyed:
+                if everyWall.checkUnit(mainMap, attackX, attackY):
+                    everyWall.deductHealth(self.damage, mainMap)
         for everyCannon in cannons:
-            if everyCannon.checkUnit(mainMap, attackX, attackY):
-                everyCannon.deductHealth(self.damage, mainMap)        
+            if not everyCannon.destroyed:
+                if everyCannon.checkUnit(mainMap, attackX, attackY):
+                    everyCannon.deductHealth(self.damage, mainMap)        
     
 
 class king(movingObject):     
@@ -153,9 +156,11 @@ class barbarian(movingObject):
         dist = {}
         townHall.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
         for everyHut in huts:
-            everyHut.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
+            if not everyHut.destroyed:
+                everyHut.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
         for everyCannon in cannons:
-            everyCannon.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
+            if not everyCannon.destroyed:
+                everyCannon.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
         minDist = 1e7; minDistX = -1; minDistY = -1
 
         for key, value in dist.items():
