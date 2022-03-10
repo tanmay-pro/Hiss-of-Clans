@@ -88,7 +88,7 @@ class cannon(building):
     def __init__(self, x, y, hitpoints, damage, range):
         super().__init__(x, y, hitpoints)
         self.damage = damage
-        self. range = range
+        self.range = range
 
 class wall(building):
     def __init__(self, x, y, hitpoints):

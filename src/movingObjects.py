@@ -6,7 +6,7 @@ import math
 from others import *
 
 class movingObject:
-    isdead = False
+    isDead = False
     
     def __init__(self, startX, startY, health, speed, damage):
         self.startPositionX = startX
@@ -69,18 +69,19 @@ class movingObject:
             attackX -= 1
         elif self.previousMove == "w":
             attackY -= 1
-        if townHall.checkUnit(mainMap, attackX, attackY):   
-            townHall.deductHealth(self.damage, mainMap)
+        if not townHall.isDestroyed:
+            if townHall.checkUnit(mainMap, attackX, attackY):   
+                townHall.deductHealth(self.damage, mainMap)
         for everyHut in huts:
-            if not everyHut.destroyed:
+            if not everyHut.isDestroyed:
                 if everyHut.checkUnit(mainMap, attackX, attackY):
                     everyHut.deductHealth(self.damage, mainMap)
         for everyWall in walls:
-            if not everyWall.destroyed:
+            if not everyWall.isDestroyed:
                 if everyWall.checkUnit(mainMap, attackX, attackY):
                     everyWall.deductHealth(self.damage, mainMap)
         for everyCannon in cannons:
-            if not everyCannon.destroyed:
+            if not everyCannon.isDestroyed:
                 if everyCannon.checkUnit(mainMap, attackX, attackY):
                     everyCannon.deductHealth(self.damage, mainMap)        
     
@@ -154,12 +155,13 @@ class barbarian(movingObject):
     
     def move(self, mainMap, townHall, huts, walls, cannons):
         dist = {}
-        townHall.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
+        if not townHall.isDestroyed:
+            townHall.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
         for everyHut in huts:
-            if not everyHut.destroyed:
+            if not everyHut.isDestroyed:
                 everyHut.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
         for everyCannon in cannons:
-            if not everyCannon.destroyed:
+            if not everyCannon.isDestroyed:
                 everyCannon.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
         minDist = 1e7; minDistX = -1; minDistY = -1
 

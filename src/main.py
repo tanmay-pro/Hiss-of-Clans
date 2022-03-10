@@ -16,7 +16,6 @@ from input import *
 from config import *
 
 colorama.init(autoreset=True)
-gameStatus = "playing"
 
 if __name__ == "__main__":
     orig_settings = termios.tcgetattr(sys.stdin)
@@ -101,6 +100,7 @@ if __name__ == "__main__":
             if not everyBarbarian.isDead: 
                 everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
                 everyBarbarian.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+        
         ch = input_to(Get())
         if ch == "w" or ch == "a" or ch == "s" or ch == "d":
             mainKing.move(ch, mainMap)
@@ -129,6 +129,22 @@ if __name__ == "__main__":
             barbarian3.assignmaxWidth(maxWidthTexture)
             barbarian3.assignTexture(texture)
             barbarian3.assignInitialPosition(mainMap)
+        returnVal = checkGameStatus(
+                mainMap, mainTownHall, arrayHuts, arrayCannons, mainKing, arrayBarbarians)
+        if returnVal == 0:
+            gameStatus = "lost"
+        elif returnVal == 1:
+            gameStatus = "won"
         sys.stdin.flush()
         sys.stdout.flush()
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)
+
+    if gameStatus == "won":
+        os.system("cls" if os.name == "nt" else "clear")
+        print("You won!")
+    elif gameStatus == "lost":
+        os.system("cls" if os.name == "nt" else "clear")
+        print("You lost!")
+    elif gameStatus == "quit":
+        os.system("cls" if os.name == "nt" else "clear")
+        print("You quit!")
