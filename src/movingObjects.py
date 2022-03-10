@@ -53,11 +53,37 @@ class movingObject:
             for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
                 if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
                     mainMap.grid[i][j] = Back.GREEN + Fore.GREEN + " "
+
+    previousMove = None
+
+    def attack(self, mainMap, townHall, huts, walls, cannons):
+        # attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
+        attackX = self.currPositionX
+        attackY = self.currPositionY
+        
+        if self.previousMove == "d":
+            attackX += 1
+        elif self.previousMove == "s":
+            attackY += 1
+        elif self.previousMove == "a":
+            attackX -= 1
+        elif self.previousMove == "w":
+            attackY -= 1
+        if townHall.checkUnit(mainMap, attackX, attackY):   
+            townHall.deductHealth(self.damage, mainMap)
+        for everyHut in huts:
+            if everyHut.checkUnit(mainMap, attackX, attackY):
+                everyHut.deductHealth(self.damage, mainMap)
+        for everyWall in walls:
+            if everyWall.checkUnit(mainMap, attackX, attackY):
+                everyWall.deductHealth(self.damage, mainMap)
+        for everyCannon in cannons:
+            if everyCannon.checkUnit(mainMap, attackX, attackY):
+                everyCannon.deductHealth(self.damage, mainMap)        
     
 
 class king(movingObject):     
-    previousMove = None
-    
+
     def __init__(self, startX, startY, health, speed, damage):
         super().__init__(startX, startY, health, speed, damage)
     
@@ -94,32 +120,6 @@ class king(movingObject):
                 self.currPositionY += 1
 
         self.updatePosition(mainMap)
-
-    def attack(self, mainMap, townHall, huts, walls, cannons):
-        # attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
-        attackX = self.currPositionX
-        attackY = self.currPositionY
-        
-        if self.previousMove == "d":
-            attackX += 1
-        elif self.previousMove == "s":
-            attackY += 1
-        elif self.previousMove == "a":
-            attackX -= 1
-        elif self.previousMove == "w":
-            attackY -= 1
-        if townHall.checkUnit(mainMap, attackX, attackY):   
-            townHall.deductHealth(self.damage, mainMap)
-        for everyHut in huts:
-            if everyHut.checkUnit(mainMap, attackX, attackY):
-                everyHut.deductHealth(self.damage, mainMap)
-        for everyWall in walls:
-            if everyWall.checkUnit(mainMap, attackX, attackY):
-                everyWall.deductHealth(self.damage, mainMap)
-        for everyCannon in cannons:
-            if everyCannon.checkUnit(mainMap, attackX, attackY):
-                everyCannon.deductHealth(self.damage, mainMap)        
-        
 
     def displayHealth(self):
         blocks = int(self.currHealth / self.fullhealth * 10)
@@ -170,10 +170,15 @@ class barbarian(movingObject):
         self.clearObject(mainMap)      
         if posX > self.currPositionX + mainMap.horizontalBoundary and mainMap.grid[self.currPositionY + mainMap.verticalBoundary][self.currPositionX + mainMap.horizontalBoundary + self.maxWidth] == Back.GREEN + Fore.GREEN + " ":
             self.currPositionX += 1
+            self.previousMove = "d"
         elif posX < self.currPositionX + mainMap.horizontalBoundary and mainMap.grid[self.currPositionY + mainMap.verticalBoundary][self.currPositionX + mainMap.horizontalBoundary - 1] == Back.GREEN + Fore.GREEN + " ":
             self.currPositionX -= 1
+            self.previousMove = "a"
         if posY > self.currPositionY + mainMap.verticalBoundary and mainMap.grid[self.currPositionY + mainMap.verticalBoundary + self.height][self.currPositionX + mainMap.horizontalBoundary] == Back.GREEN + Fore.GREEN + " ":
             self.currPositionY += 1
+            self.previousMove = "s"
         elif posY < self.currPositionY + mainMap.verticalBoundary and mainMap.grid[self.currPositionY + mainMap.verticalBoundary - 1][self.currPositionX + mainMap.horizontalBoundary] == Back.GREEN + Fore.GREEN + " ":
             self.currPositionY -= 1
+            self.previousMove = "w"
         self.updatePosition(mainMap)
+    
