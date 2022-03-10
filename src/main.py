@@ -1,4 +1,5 @@
 from multiprocessing.spawn import spawn_main
+from matplotlib.pyplot import bar
 import numpy as np
 import colorama
 import time
@@ -87,7 +88,7 @@ if __name__ == "__main__":
     
     sp1 = spawningPoint(10, 10)
     sp2 = spawningPoint(10, 20)
-    sp3 = spawningPoint(10, 30)
+    sp3 = spawningPoint(90, 15)
     
     arrayBarbarians = []
     texture, heightTexture, maxWidthTexture = getTexture("../textures/barbarian.txt")
@@ -105,25 +106,27 @@ if __name__ == "__main__":
             mainKing.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
         elif ch == "1":
             barbarian1 = barbarian(sp1.positionX, sp1.positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
-            arrayBarbarians.push(barbarian1)
+            arrayBarbarians.append(barbarian1)
             barbarian1.assignHeight(heightTexture)
             barbarian1.assignmaxWidth(maxWidthTexture)
             barbarian1.assignTexture(texture)
             barbarian1.assignInitialPosition(mainMap)        
         elif ch== "2":
             barbarian2 = barbarian(sp2.positionX, sp2.positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
-            arrayBarbarians.push(barbarian2)
+            arrayBarbarians.append(barbarian2)
             barbarian2.assignHeight(heightTexture)
             barbarian2.assignmaxWidth(maxWidthTexture)
             barbarian2.assignTexture(texture)
             barbarian2.assignInitialPosition(mainMap)
         elif ch== "3":
             barbarian3 = barbarian(sp3.positionX, sp3.positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
-            arrayBarbarians.push(barbarian3)
+            arrayBarbarians.append(barbarian3)
             barbarian3.assignHeight(heightTexture)
             barbarian3.assignmaxWidth(maxWidthTexture)
             barbarian3.assignTexture(texture)
             barbarian3.assignInitialPosition(mainMap)
+        for everyBarbarian in arrayBarbarians:
+            everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
         sys.stdin.flush()
         sys.stdout.flush()
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)

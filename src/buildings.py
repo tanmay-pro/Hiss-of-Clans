@@ -1,4 +1,5 @@
 from map import *
+import math
 
 class building:
     isDestroyed = False
@@ -36,7 +37,13 @@ class building:
             return True
         else:
             return False
-
+        
+    def getDistances(self, mainMap, dist, posX, posY):
+        for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
+            dist[i] = {}
+            for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
+                dist[i][j] = math.sqrt((i - posY)**2 + (j - posX)**2)
+        
     def deductHealth(self, damage, mainMap):
         self.currHealth -= damage
         self.changeColor(mainMap)

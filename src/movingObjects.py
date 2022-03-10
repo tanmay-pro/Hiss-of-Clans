@@ -1,5 +1,6 @@
 from os import stat
 from map import *
+import math
 from others import *
 
 class movingObject:
@@ -36,6 +37,14 @@ class movingObject:
         self.currHealth -= damage
         if self.currHealth <= 0:
             self.isdead = True 
+
+    def updatePosition(self, mainMap):
+        for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
+            for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
+                if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":     
+                    mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
+                    mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j] 
+    
 
 class king(movingObject): 
     
@@ -80,13 +89,6 @@ class king(movingObject):
                 self.currPositionY += 1
                    
         self.updatePosition(mainMap)
-    
-    def updatePosition(self, mainMap):
-        for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
-            for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
-                if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":     
-                    mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
-                    mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j] 
 
     def attack(self, mainMap, townHall, huts, walls, cannons):
         # attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
@@ -141,3 +143,32 @@ class king(movingObject):
 class barbarian(movingObject):
     def __init__(self, startX, startY, health, speed, damage):
         super().__init__(startX, startY, health, speed, damage)
+    
+    def move(self, mainMap, townHall, huts, walls, cannons):
+        dist = {}
+        townHall.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
+        for everyHut in huts:
+            everyHut.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
+        for everyWall in walls:
+            everyWall.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
+        for everyCannon in cannons:
+            everyCannon.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
+        minDist = 1e7; minDistX = -1; minDistY = -1
+
+        # for i in range(dist):
+        #     for j in range(dist[i]):
+        #         if dist[i][j] < minDist:
+        #             minDistX = i; minDistY = j
+        # self.decideDirection(mainMap ,minDistX, minDistY)
+        print(dist)
+        
+    def decideDirection(self, mainMap, posX, posY):
+        possibleX= {self.currPositionX, self.currPositionX + 1, self.currPositionX - 1}
+        possibleY = {self.currPositionY, self.currPositionY + 1, self.currPositionY - 1}
+        minDist = 1e7; minDistX = -1; minDistY = -1
+        for i in range(possibleX):
+            for j in range(possibleY):
+                if math.sqrt((i - posX)**2 + (j - posY)**2) < minDist:
+                    minDistX = i; minDistY = j
+        self.currPositionX = minDistX; self.currPositionY = minDistY
+        self.updatePosition(mainMap)
