@@ -155,7 +155,7 @@ class barbarian(movingObject):
     
     def move(self, mainMap, townHall, huts, walls, cannons):
         dist = {}
-        if not townHall.destroyed:
+        if not townHall.isDestroyed:
             townHall.getDistances(mainMap, dist, self.currPositionX, self.currPositionY)
         for everyHut in huts:
             if not everyHut.isDestroyed:
