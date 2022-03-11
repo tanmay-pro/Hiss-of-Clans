@@ -1,3 +1,4 @@
+from config import AXE_RANGE
 from map import *
 import math
 
@@ -40,6 +41,17 @@ class building:
         else:
             return False
         
+    def checkIfUnitInRange(self, mainMap, posX, posY):
+        present = False
+        for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
+            for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
+                if math.sqrt((i - posY)**2 + (j - posX)**2) <= AXE_RANGE:
+                    present = True
+        if present:
+            return True
+        else:
+            return False
+
     def getDistances(self, mainMap, dist, posX, posY):
         for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
             for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):

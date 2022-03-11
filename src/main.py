@@ -18,6 +18,10 @@ import time
 
 colorama.init(autoreset=True)
 gameStatus = "playing"
+currBarbarians = 0
+currSpellsUsed = 0
+frames = 0
+divideFactor = 1
 if __name__ == "__main__":
     orig_settings = termios.tcgetattr(sys.stdin)
     tty.setcbreak(sys.stdin)
@@ -95,19 +99,26 @@ if __name__ == "__main__":
     texture, heightTexture, maxWidthTexture = getTexture("../textures/barbarian.txt")
     f = open("replayInputs.txt","w+")
     while gameStatus == "playing":
+        frames += 1
         startTime = time.time()
         os.system("cls" if os.name == "nt" else "clear")
         mainMap.drawMap()
         if not mainKing.isDead:
             mainKing.displayHealth()
+        print("Number of barbarians you can still spawn: " + str(MAX_BARBARIANS -currBarbarians))
+        print("Number of spells you can still use: " + str(MAX_SPELLS - currSpellsUsed))
+        print(TIMEOUT_VAL)
         for everyBarbarian in arrayBarbarians:
             if not everyBarbarian.isDead: 
                 everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
                 everyBarbarian.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
-        for everyCannon in arrayCannons:
-            if not everyCannon.isDestroyed:
-                everyCannon.assignPosition(mainMap)
-                everyCannon.attack(mainMap, mainKing, arrayBarbarians)
+        
+        if(frames % divideFactor == 0):
+            for everyCannon in arrayCannons:
+                if not everyCannon.isDestroyed:
+                    everyCannon.assignPosition(mainMap)
+                    everyCannon.attack(mainMap, mainKing, arrayBarbarians)
+
         if TIMEOUT_VAL > (time.time() - startTime):
             time.sleep(TIMEOUT_VAL - (time.time() - startTime))
         ch = input_to(Get())
@@ -120,7 +131,8 @@ if __name__ == "__main__":
         elif ch == " ":
             if not mainKing.isDead:
                 mainKing.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
-        elif ch == "1" or ch=="2" or ch=="3":
+        elif (ch == "1" or ch=="2" or ch=="3") and currBarbarians < MAX_BARBARIANS:
+            currBarbarians += 1 
             if ch == "1":
                 barbarian1 = barbarian(sp1.positionX, sp1.positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
             elif ch == "2":
@@ -132,9 +144,13 @@ if __name__ == "__main__":
             barbarian1.assignmaxWidth(maxWidthTexture)
             barbarian1.assignTexture(texture)
             barbarian1.assignInitialPosition(mainMap)        
-        elif ch == "r" or ch == "h":
+        elif (ch == "r" or ch == "h") and currSpellsUsed < MAX_SPELLS:
+            currSpellsUsed += 1
             if ch == "r":
-                Spell = spell(2, 2, 1)
+                movementFactor = 2
+                Spell = spell(2, movementFactor, 1)
+                TIMEOUT_VAL/=movementFactor
+                divideFactor *= movementFactor
             else:
                 Spell = spell(1, 1, 1.5)
             if not mainKing.isDead:            
@@ -142,7 +158,9 @@ if __name__ == "__main__":
             for everyBarbarian in arrayBarbarians:
                 if not everyBarbarian.isDead:
                     everyBarbarian.castSpell(Spell)
-
+        elif ch == "l":
+            if not mainKing.isDead:
+                mainKing.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)            
         returnVal = checkGameStatus(
                 mainMap, mainTownHall, arrayHuts, arrayCannons, mainKing, arrayBarbarians)
         if returnVal == 0:

@@ -1,7 +1,5 @@
-from os import stat
 from spells import *
 from map import *
-import math
 from others import *
 
 class movingObject:
@@ -170,6 +168,27 @@ class king(movingObject):
             if not everyCannon.isDestroyed:
                 if everyCannon.checkUnit(mainMap, attackX, attackY):
                     everyCannon.deductHealth(self.damage, mainMap)
+
+    def attackMajor(self, mainMap, townHall, huts, walls, cannons):
+        attackX = self.currPositionX
+        attackY = self.currPositionY
+
+        if not townHall.isDestroyed:
+            if townHall.checkIfUnitInRange(mainMap, attackX, attackY):
+                townHall.deductHealth(self.damage, mainMap)
+        for everyHut in huts:
+            if not everyHut.isDestroyed:
+                if everyHut.checkIfUnitInRange(mainMap, attackX, attackY):
+                    everyHut.deductHealth(self.damage, mainMap)
+        for everyWall in walls:
+            if not everyWall.isDestroyed:
+                if everyWall.checkIfUnitInRange(mainMap, attackX, attackY):
+                    everyWall.deductHealth(self.damage, mainMap)
+        for everyCannon in cannons:
+            if not everyCannon.isDestroyed:
+                if everyCannon.checkIfUnitInRange(mainMap, attackX, attackY):
+                    everyCannon.deductHealth(self.damage, mainMap)
+
 
 
 class barbarian(movingObject):
