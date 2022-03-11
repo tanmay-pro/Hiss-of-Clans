@@ -5,7 +5,7 @@ from colorama import Fore, Back
 
 class map:
     grid = []
-    # backGrid = []
+    backGrid = []
     
     def __init__(self, cols, rows, h, v):
         self.rows = rows
@@ -20,16 +20,16 @@ class map:
             if i < 0 + self.verticalBoundary:
                 for j in range(0, 2 * self.horizontalBoundary + self.cols): 
                     row.append(Back.YELLOW + Fore.YELLOW +" ")
-                    # backRow.append(" ")
+                    # backRow.append(Back.YELLOW + Fore.YELLOW + " ")
             elif i >= 0 + self.verticalBoundary + self.rows:
                 for j in range(0, 2 * self.horizontalBoundary + self.cols):
                     row.append(Back.YELLOW + Fore.YELLOW + " ")
-                    # backRow.append(" ")
+                    # backRow.append(Back.YELLOW + Fore.YELLOW + " ")
             else:
                 for j in range(0, 2 * self.horizontalBoundary + self.cols):
                     if j < 0 + self.horizontalBoundary or j >= 0 + self.horizontalBoundary + self.cols:
                         row.append(Back.YELLOW + Fore.YELLOW + " ")
-                        # backRow.append(" ")                   
+                        # backRow.append(Back.YELLOW + Fore.YELLOW + " ")
                     else:
                         row.append(Back.GREEN + Fore.GREEN + " ")
                         # backRow.append(" ")
@@ -43,3 +43,4 @@ class map:
                 printMap += self.grid[r][c]
             printMap += '\n'    
         print('\033[H' + printMap)
+    

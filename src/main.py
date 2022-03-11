@@ -32,6 +32,7 @@ if __name__ == "__main__":
     mainKing.assignmaxWidth(maxWidthTexture)
     mainKing.assignTexture(texture)
     mainKing.assignInitialPosition(mainMap)
+    mainKing.isKing = True
 
     mainTownHall = townHall(TOWN_X_POSITION, TOWN_Y_POSITION, TOWN_HEALTH)
     texture, heightTexture, maxWidthTexture = getTexture(
@@ -105,6 +106,7 @@ if __name__ == "__main__":
                 everyBarbarian.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
         for everyCannon in arrayCannons:
             if not everyCannon.isDestroyed:
+                everyCannon.assignPosition(mainMap)
                 everyCannon.attack(mainMap, mainKing, arrayBarbarians)
         if TIMEOUT_VAL > (time.time() - startTime):
             time.sleep(TIMEOUT_VAL - (time.time() - startTime))
