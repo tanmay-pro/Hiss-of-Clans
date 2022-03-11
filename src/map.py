@@ -1,6 +1,4 @@
-from re import S
 import numpy as np
-import colorama
 from colorama import Fore, Back, Style
 
 class map:

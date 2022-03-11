@@ -1,6 +1,6 @@
-from map import *
-from buildings import *
-from movingObjects import *
+from src.map import *
+from src.buildings import *
+from src.movingObjects import *
 
 def getTexture(fileName):
     width = 0

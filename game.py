@@ -7,14 +7,13 @@ import tty
 import sys
 import os
 from colorama import Fore, Back, Style
-from buildings import *
-from movingObjects import *
-from others import *
-from spells import *
-from map import *
-from input import *
-from config import *
-import time
+from src.buildings import *
+from src.movingObjects import *
+from src.others import *
+from src.spells import *
+from src.map import *
+from src.input import *
+from src.config import *
 
 colorama.init(autoreset=True)
 gameStatus = "playing"
@@ -31,7 +30,7 @@ if __name__ == "__main__":
 
     mainKing = king(KING_STARTING_X, KING_STARTING_Y, KING_HEALTH, KING_SPEED, KING_ATTACK)
     texture, heightTexture, maxWidthTexture = getTexture(
-        "../textures/king.txt")
+        "src/textures/king.txt")
     mainKing.assignHeight(heightTexture)
     mainKing.assignmaxWidth(maxWidthTexture)
     mainKing.assignTexture(texture)
@@ -40,14 +39,14 @@ if __name__ == "__main__":
 
     mainTownHall = townHall(TOWN_X_POSITION, TOWN_Y_POSITION, TOWN_HEALTH)
     texture, heightTexture, maxWidthTexture = getTexture(
-        "../textures/townHall.txt")
+        "src/textures/townHall.txt")
     mainTownHall.assignHeight(heightTexture)
     mainTownHall.assignmaxWidth(maxWidthTexture)
     mainTownHall.assignTexture(texture)
     mainTownHall.assignPosition(mainMap)
 
     arrayHuts = []
-    texture, heightTexture, maxWidthTexture = getTexture("../textures/hut.txt")
+    texture, heightTexture, maxWidthTexture = getTexture("src/textures/hut.txt")
     for i in range(0, NUMBER_HUTS_IN_ROW):
         arrayHuts.append(hut(HUT_STARTING1, HUT_STARTINGY + 6*i, HUT_HEALTH))
     for i in range(0, NUMBER_HUTS_IN_ROW):
@@ -60,7 +59,7 @@ if __name__ == "__main__":
 
     arrayWalls = []
     texture, heightTexture, maxWidthTexture = getTexture(
-        "../textures/wall.txt")
+        "src/textures/wall.txt")
     for i in range(0, NUMBER_WALLS_Y):
         arrayWalls.append(wall(WALL_STARTING1X, WALL_STARTING1Y + i, WALL_HEALTH))
     for i in range(0, NUMBER_WALLS_Y):
@@ -78,7 +77,7 @@ if __name__ == "__main__":
 
     arrayCannons = []
     texture, heightTexture, maxWidthTexture = getTexture(
-        "../textures/cannon.txt")
+        "src/textures/cannon.txt")
     cannon1 = cannon(CANNON_1X, CANNON_1Y, CANNON_HEALTH, CANNON_DAMAGE, CANNON_RANGE)
     cannon2 = cannon(CANNON_2X, CANNON_2Y, CANNON_HEALTH, CANNON_DAMAGE, CANNON_RANGE)
     arrayCannons.append(cannon1)
@@ -96,7 +95,7 @@ if __name__ == "__main__":
     sp3 = spawningPoint(90, 15)
     
     arrayBarbarians = []
-    texture, heightTexture, maxWidthTexture = getTexture("../textures/barbarian.txt")
+    texture, heightTexture, maxWidthTexture = getTexture("src/textures/barbarian.txt")
     f = open("replayInputs.txt","w+")
     while gameStatus == "playing":
         frames += 1

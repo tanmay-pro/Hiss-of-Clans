@@ -1,6 +1,6 @@
-from spells import *
-from map import *
-from others import *
+from src.spells import *
+from src.map import *
+from src.others import *
 from colorama import Fore, Back, Style
 
 class movingObject:
@@ -227,25 +227,25 @@ class barbarian(movingObject):
             if posX > self.currPositionX + mainMap.horizontalBoundary:
                 temp = mainMap.grid[self.currPositionY + mainMap.verticalBoundary][self.currPositionX + mainMap.horizontalBoundary + self.maxWidth]
                 temp = temp[-5]
-                if temp == "B" or temp == "K":
+                if temp == "B":
                     self.currPositionX += 1
             
             if posX < self.currPositionX + mainMap.horizontalBoundary:
                 temp = mainMap.grid[self.currPositionY + mainMap.verticalBoundary][self.currPositionX + mainMap.horizontalBoundary - 1]
                 temp = temp[-5]
-                if temp == "B" or temp == "K":
+                if temp == "B":
                     self.currPositionX -= 1
             
             if posY > self.currPositionY + mainMap.verticalBoundary:
                 temp = mainMap.grid[self.currPositionY + mainMap.verticalBoundary + self.height][self.currPositionX + mainMap.horizontalBoundary]
                 temp = temp[-5]
-                if temp == "B" or temp == "K":
+                if temp == "B":
                     self.currPositionY += 1
             
             if posY < self.currPositionY + mainMap.verticalBoundary:
                 temp = mainMap.grid[self.currPositionY + mainMap.verticalBoundary - 1][self.currPositionX + mainMap.horizontalBoundary]
                 temp = temp[-5]
-                if temp == "B" or temp == "K":
+                if temp == "B":
                     self.currPositionY -= 1
             
         self.updatePosition(mainMap)

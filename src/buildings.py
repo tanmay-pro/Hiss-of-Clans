@@ -1,5 +1,5 @@
-from config import AXE_RANGE
-from map import *
+from src.config import *
+from src.map import *
 import math
 
 class building:
