@@ -92,7 +92,7 @@ if __name__ == "__main__":
     
     arrayBarbarians = []
     texture, heightTexture, maxWidthTexture = getTexture("../textures/barbarian.txt")
-    f = open("replayInputs.txt","w+")
+    f = open("replayInputs.txt","r")
     while gameStatus == "playing":
         startTime = time.time()
         os.system("cls" if os.name == "nt" else "clear")
@@ -108,8 +108,8 @@ if __name__ == "__main__":
                 everyCannon.attack(mainMap, mainKing, arrayBarbarians)
         if TIMEOUT_VAL > (time.time() - startTime):
             time.sleep(TIMEOUT_VAL - (time.time() - startTime))
-        ch = input_to(Get())
-        f.write(str(ch) + "\n")
+        ch = f.readline()
+        print(ch)
         if ch == "w" or ch == "a" or ch == "s" or ch == "d":
             if not mainKing.isDead:
                 mainKing.move(ch, mainMap)
@@ -150,7 +150,7 @@ if __name__ == "__main__":
         sys.stdin.flush()
         sys.stdout.flush()
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)
-    f.close()
+
     if gameStatus == "won":
         os.system("cls" if os.name == "nt" else "clear")
         print("You won!")

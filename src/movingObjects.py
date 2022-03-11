@@ -37,7 +37,7 @@ class movingObject:
     def deductHealth(self, damage, mainMap):
         self.currHealth -= damage
         if self.currHealth <= 0:
-            self.isdead = True
+            self.isDead = True
             self.clearObject(mainMap) 
 
     def updatePosition(self, mainMap):
