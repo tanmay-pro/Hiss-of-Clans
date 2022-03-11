@@ -107,7 +107,6 @@ if __name__ == "__main__":
             mainKing.displayHealth()
         print("Number of barbarians you can still spawn: " + str(MAX_BARBARIANS -currBarbarians))
         print("Number of spells you can still use: " + str(MAX_SPELLS - currSpellsUsed))
-        print(TIMEOUT_VAL)
         for everyBarbarian in arrayBarbarians:
             if not everyBarbarian.isDead: 
                 everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)

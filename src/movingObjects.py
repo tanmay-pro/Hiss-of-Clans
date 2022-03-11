@@ -1,6 +1,7 @@
 from spells import *
 from map import *
 from others import *
+from colorama import Fore, Back, Style
 
 class movingObject:
     isDead = False
@@ -32,11 +33,8 @@ class movingObject:
                 if self.texture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX] != "\n":
                     mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX]
                     mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j] 
-                    # if self.isKing:
-                    #     mainMap.backGrid[i][j] = "K"
-                    # else:
-                    #     mainMap.backGrid[i][j] = "B"
-
+                    if not self.isKing:
+                        mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + Style.BRIGHT + mainMap.grid[i][j] + Style.RESET_ALL
 
     def updatePosition(self, mainMap):
         for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
@@ -44,21 +42,15 @@ class movingObject:
                 if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":     
                     mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
                     mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j] 
-                    # if self.isKing:
-                    #     mainMap.backGrid[i][j] = "K"
-                    # else:
-                    #     mainMap.backGrid[i][j] = "B"
+                    if not self.isKing:
+                        mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + Style.BRIGHT + mainMap.grid[i][j] + Style.RESET_ALL
 
     def clearObject(self, mainMap):
         for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
             for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
                 if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
                     mainMap.grid[i][j] = Back.GREEN + Fore.GREEN + " "
-                    # if self.isKing:
-                    #     mainMap.backGrid[i][j] = " "
-                    # else:
-                    #     mainMap.backGrid[i][j] = " " 
-    
+                    
     def castSpell(self, cast):
         self.damage *= cast.damageEffect
         self.movSpeed *= cast.speedEffect
@@ -151,8 +143,6 @@ class king(movingObject):
         elif self.previousMove == "w":
             attackY -= 1
 
-        # mainMap.backGrid[attackX + mainMap.horizontalBoundary][attackY + mainMap.verticalBoundary] = "S"
-
         if not townHall.isDestroyed:
             if townHall.checkUnit(mainMap, attackX, attackY):
                 townHall.deductHealth(self.damage, mainMap)
@@ -233,6 +223,31 @@ class barbarian(movingObject):
             self.currPositionY -= 1
             changeY = True
 
+        if not changeX and not changeY:
+            if posX > self.currPositionX + mainMap.horizontalBoundary:
+                temp = mainMap.grid[self.currPositionY + mainMap.verticalBoundary][self.currPositionX + mainMap.horizontalBoundary + self.maxWidth]
+                temp = temp[-5]
+                if temp == "B" or temp == "K":
+                    self.currPositionX += 1
+            
+            if posX < self.currPositionX + mainMap.horizontalBoundary:
+                temp = mainMap.grid[self.currPositionY + mainMap.verticalBoundary][self.currPositionX + mainMap.horizontalBoundary - 1]
+                temp = temp[-5]
+                if temp == "B" or temp == "K":
+                    self.currPositionX -= 1
+            
+            if posY > self.currPositionY + mainMap.verticalBoundary:
+                temp = mainMap.grid[self.currPositionY + mainMap.verticalBoundary + self.height][self.currPositionX + mainMap.horizontalBoundary]
+                temp = temp[-5]
+                if temp == "B" or temp == "K":
+                    self.currPositionY += 1
+            
+            if posY < self.currPositionY + mainMap.verticalBoundary:
+                temp = mainMap.grid[self.currPositionY + mainMap.verticalBoundary - 1][self.currPositionX + mainMap.horizontalBoundary]
+                temp = temp[-5]
+                if temp == "B" or temp == "K":
+                    self.currPositionY -= 1
+            
         self.updatePosition(mainMap)
 
     def deductHealth(self, damage, mainMap):
@@ -249,22 +264,25 @@ class barbarian(movingObject):
                 for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
                     if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
                         mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
-                        mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j]
+                        # mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j]
+                        mainMap.grid[i][j] = Fore.BLACK + Back.GREEN +  Style.DIM + mainMap.grid[i][j] + Style.RESET_ALL
     
         if blocks <= 5 and blocks > 2:
             for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
                 for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
                     if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
                         mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
-                        mainMap.grid[i][j] = Fore.YELLOW + Back.GREEN + mainMap.grid[i][j]
+                        # mainMap.grid[i][j] = Fore.YELLOW + Back.GREEN + mainMap.grid[i][j]
+                        mainMap.grid[i][j] = Fore.BLACK + Back.GREEN +  Style.NORMAL + mainMap.grid[i][j] + Style.RESET_ALL
 
         if blocks <= 10 and blocks > 5:
             for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
                 for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
                     if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
                         mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
-                        mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j]
-    
+                        # mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j]
+                        mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + Style.BRIGHT + mainMap.grid[i][j] + Style.RESET_ALL
+
     def attack(self, mainMap, townHall, huts, walls, cannons):
         # attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
         hasAttacked = False
