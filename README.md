@@ -16,6 +16,7 @@ A terminal version of Clash of Clans implemented in Python from scratch without 
 * `1 2 3` are the three differet keys for spawning the barbarians.
 * Pressing `r` deploys the rage spell.
 * Pressing `h` deploys the healing spell.
+* Pressing `l` will make the king use his leviathan axe (Damage on a larger area inside a particular range).
 * To Win the game you have to strategically destroy all the non-wall buildings.
 * You will lose the game if all active troops die.
 
