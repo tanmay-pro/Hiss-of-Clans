@@ -156,7 +156,11 @@ if __name__ == "__main__":
             for everyCannon in arrayCannons:
                 if not everyCannon.isDestroyed:
                     everyCannon.assignPosition(mainMap)
-                    everyCannon.attack(mainMap, mainKing, arrayBarbarians)
+                    everyCannon.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)
+            for everyTower in arrayTowers:
+                if not everyTower.isDestroyed:
+                    everyTower.assignPosition(mainMap)
+                    everyTower.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)
 
         if TIMEOUT_VAL > (time.time() - startTime):
             time.sleep(TIMEOUT_VAL - (time.time() - startTime))
