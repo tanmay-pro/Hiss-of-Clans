@@ -137,7 +137,7 @@ class king(movingObject):
         print(printMap)
         print("King Health = " + str(self.currHealth))
 
-    def attack(self, mainMap, townHall, huts, walls, cannons):
+    def attack(self, mainMap, townHall, huts, walls, cannons, towers):
         # attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
         attackX = self.currPositionX
         attackY = self.currPositionY
@@ -166,8 +166,12 @@ class king(movingObject):
             if not everyCannon.isDestroyed:
                 if everyCannon.checkUnit(mainMap, attackX, attackY):
                     everyCannon.deductHealth(self.damage, mainMap)
+        for everyTower in towers:
+            if not everyTower.isDestroyed:
+                if everyTower.checkUnit(mainMap, attackX, attackY):
+                    everyTower.deductHealth(self.damage, mainMap)
 
-    def attackMajor(self, mainMap, townHall, huts, walls, cannons):
+    def attackMajor(self, mainMap, townHall, huts, walls, cannons, towers):
         attackX = self.currPositionX
         attackY = self.currPositionY
 
@@ -186,6 +190,10 @@ class king(movingObject):
             if not everyCannon.isDestroyed:
                 if everyCannon.checkIfUnitInRange(mainMap, attackX, attackY):
                     everyCannon.deductHealth(self.damage, mainMap)
+        for everyTower in towers:
+            if not everyTower.isDestroyed:
+                if everyTower.checkIfUnitInRange(mainMap, attackX, attackY):
+                    everyTower.deductHealth(self.damage, mainMap)
 
 
 class archerQueen(movingObject):
@@ -264,7 +272,7 @@ class barbarian(movingObject):
     def __init__(self, startX, startY, health, speed, damage):
         super().__init__(startX, startY, health, speed, damage)
 
-    def move(self, mainMap, townHall, huts, walls, cannons):
+    def move(self, mainMap, townHall, huts, walls, cannons, towers):
         dist = {}
         if not townHall.isDestroyed:
             townHall.getDistances(
@@ -277,6 +285,11 @@ class barbarian(movingObject):
             if not everyCannon.isDestroyed:
                 everyCannon.getDistances(
                     mainMap, dist, self.currPositionX, self.currPositionY)
+        for everyTower in towers:
+            if not everyTower.isDestroyed:
+                everyTower.getDistances(
+                    mainMap, dist, self.currPositionX, self.currPositionY)
+
         minDist = 1e7
         minDistX = -1
         minDistY = -1
@@ -376,7 +389,7 @@ class barbarian(movingObject):
                         mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + \
                             Style.BRIGHT + mainMap.grid[i][j] + Style.RESET_ALL
 
-    def attack(self, mainMap, townHall, huts, walls, cannons):
+    def attack(self, mainMap, townHall, huts, walls, cannons, towers):
         # attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
         hasAttacked = False
         attackX = self.currPositionX
@@ -404,7 +417,11 @@ class barbarian(movingObject):
                 if everyCannon.checkUnit(mainMap, attackX, attackY):
                     everyCannon.deductHealth(self.damage, mainMap)
                     hasAttacked = True
-
+        for everyTower in towers:
+            if not everyTower.isDestroyed:
+                if everyTower.checkUnit(mainMap, attackX, attackY):
+                    everyTower.deductHealth(self.damage, mainMap)
+                    hasAttacked = True
         if hasAttacked:
             return
 
@@ -428,6 +445,11 @@ class barbarian(movingObject):
             if not everyCannon.isDestroyed:
                 if everyCannon.checkUnit(mainMap, attackX, attackY):
                     everyCannon.deductHealth(self.damage, mainMap)
+                    hasAttacked = True
+        for everyTower in towers:
+            if not everyTower.isDestroyed:
+                if everyTower.checkUnit(mainMap, attackX, attackY):
+                    everyTower.deductHealth(self.damage, mainMap)
                     hasAttacked = True
 
         if hasAttacked:
@@ -455,6 +477,11 @@ class barbarian(movingObject):
                 if everyCannon.checkUnit(mainMap, attackX, attackY):
                     everyCannon.deductHealth(self.damage, mainMap)
                     hasAttacked = True
+        for everyTower in towers:
+            if not everyTower.isDestroyed:
+                if everyTower.checkUnit(mainMap, attackX, attackY):
+                    everyTower.deductHealth(self.damage, mainMap)
+                    hasAttacked = True
 
         if hasAttacked:
             return
@@ -480,6 +507,11 @@ class barbarian(movingObject):
                 if everyCannon.checkUnit(mainMap, attackX, attackY):
                     everyCannon.deductHealth(self.damage, mainMap)
                     hasAttacked = True
+        for everyTower in towers:
+            if not everyTower.isDestroyed:
+                if everyTower.checkUnit(mainMap, attackX, attackY):
+                    everyTower.deductHealth(self.damage, mainMap)
+                    hasAttacked = True
 
 
 class archer(movingObject):
@@ -488,7 +520,7 @@ class archer(movingObject):
         super().__init__(startX, startY, health, speed, damage)
         self.range = range
 
-    def move(self, mainMap, townHall, huts, walls, cannons):
+    def move(self, mainMap, townHall, huts, walls, cannons, towers):
         dist = {}
         if not townHall.isDestroyed:
             townHall.getDistances(
@@ -501,6 +533,11 @@ class archer(movingObject):
             if not everyCannon.isDestroyed:
                 everyCannon.getDistances(
                     mainMap, dist, self.currPositionX, self.currPositionY)
+        for everyTower in towers:
+            if not everyTower.isDestroyed:
+                everyTower.getDistances(
+                    mainMap, dist, self.currPositionX, self.currPositionY)
+
         minDist = 1e7
         minDistX = -1
         minDistY = -1

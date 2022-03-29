@@ -104,7 +104,6 @@ class building:
                             mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX]
                             mainMap.grid[i][j] = Back.GREEN + Fore.BLUE + mainMap.grid[i][j]
                             self.currForeColor = Fore.BLUE
-                
         
 # Each building below shows inheritance
 class cannon(building): 
@@ -117,20 +116,6 @@ class cannon(building):
         attackX = self.positionX + mainMap.horizontalBoundary + 1
         attackY = self.positionY + mainMap.verticalBoundary + 1
         attackDone = False
-        # if not mainKing.isDead:
-        #     distance = math.sqrt((attackX - mainKing.currPositionX)**2 + (attackY - mainKing.currPositionY)**2)
-        #     if distance <= self.range:
-        #         self.getColor(mainMap)
-        #         mainKing.deductHealth(self.damage, mainMap)
-        #         attackKing = True
-        # if not attackKing:
-        #     for i in range(len(arrayBarbarians)):
-        #         if not arrayBarbarians[i].isDead:
-        #             distance = math.sqrt((attackX - arrayBarbarians[i].currPositionX)**2 + (attackY - arrayBarbarians[i].currPositionY)**2)
-        #             if distance <= self.range:
-        #                 self.getColor(mainMap)
-        #                 arrayBarbarians[i].deductHealth(self.damage, mainMap)
-        #                 break
         if not mainKing.isDead:
             distance = math.sqrt((attackX - mainKing.currPositionX)**2 + (attackY - mainKing.currPositionY)**2)
             if distance <= self.range:
@@ -193,8 +178,6 @@ class wizardTower(building):
             distance = math.sqrt(
                 (attackX - mainKing.currPositionX)**2 + (attackY - mainKing.currPositionY)**2)
             if distance <= self.range:
-                # self.getColor(mainMap)
-                # mainKing.deductHealth(self.damage, mainMap)
                 attackDone = True
                 attackedX = mainKing.currPositionX
                 attackedY = mainKing.currPositionY
@@ -203,8 +186,6 @@ class wizardTower(building):
                 distance = math.sqrt(
                     (attackX - mainQueen.currPositionX)**2 + (attackY - mainQueen.currPositionY)**2)
                 if distance <= self.range:
-                    # self.getColor(mainMap)
-                    # mainQueen.deductHealth(self.damage, mainMap)
                     attackDone = True
                     attackedX = mainQueen.currPositionX
                     attackedY = mainQueen.currPositionY
@@ -214,8 +195,8 @@ class wizardTower(building):
                     distance = math.sqrt(
                         (attackX - arrayBalloons[i].currPositionX)**2 + (attackY - arrayBalloons[i].currPositionY)**2)
                     if distance <= self.range:
-                        # self.getColor(mainMap)
-                        # arrayBalloons[i].deductHealth(self.damage, mainMap)
+                        attackedX = arrayBalloons[i].currPositionX
+                        attackedY = arrayBalloons[i].currPositionY
                         attackDone = True
                         break
         if not attackDone:
@@ -224,8 +205,8 @@ class wizardTower(building):
                     distance = math.sqrt((attackX - arrayBarbarians[i].currPositionX)**2 + (
                         attackY - arrayBarbarians[i].currPositionY)**2)
                     if distance <= self.range:
-                        # self.getColor(mainMap)
-                        # arrayBarbarians[i].deductHealth(self.damage, mainMap)
+                        attackedX = arrayBarbarians[i].currPositionX
+                        attackedY = arrayBarbarians[i].currPositionY
                         attackDone = True
                         break
         if not attackDone:
@@ -234,8 +215,8 @@ class wizardTower(building):
                     distance = math.sqrt(
                         (attackX - arrayArchers[i].currPositionX)**2 + (attackY - arrayArchers[i].currPositionY)**2)
                     if distance <= self.range:
-                        # self.getColor(mainMap)
-                        # arrayArchers[i].deductHealth(self.damage, mainMap)
+                        attackedX = arrayArchers[i].currPositionX
+                        attackedY = arrayArchers[i].currPositionY
                         attackDone = True
                         break
         if attackDone:

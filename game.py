@@ -141,22 +141,22 @@ if __name__ == "__main__":
         
         for everyBarbarian in arrayBarbarians:
             if not everyBarbarian.isDead: 
-                everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
-                everyBarbarian.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+                everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
+                everyBarbarian.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
         for everyArcher in arrayArchers:
             if not everyArcher.isDead:
-                everyArcher.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+                everyArcher.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
                 # everyArcher.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
         for everyBalloon in arrayBalloons:
             if not everyBalloon.isDead:
-                everyBalloon.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+                everyBalloon.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
                 # everyBalloon.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
         
         if(frames % divideFactor == 0):
             for everyCannon in arrayCannons:
                 if not everyCannon.isDestroyed:
                     everyCannon.assignPosition(mainMap)
-                    everyCannon.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)
+                    everyCannon.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)    
             for everyTower in arrayTowers:
                 if not everyTower.isDestroyed:
                     everyTower.assignPosition(mainMap)
@@ -175,7 +175,7 @@ if __name__ == "__main__":
         
         elif ch == " ":
             if not mainKing.isDead:
-                mainKing.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+                mainKing.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
         
         elif (ch == "1" or ch=="2" or ch=="3") and currBarbarians < MAX_BARBARIANS:
             currBarbarians += 1 
@@ -242,7 +242,7 @@ if __name__ == "__main__":
         
         elif ch == "l":
             if not mainKing.isDead:
-                mainKing.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)            
+                mainKing.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)            
         returnVal = checkGameStatus(
                 mainMap, mainTownHall, arrayHuts, arrayCannons, mainKing, arrayBarbarians)
         if returnVal == 0:
