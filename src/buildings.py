@@ -143,3 +143,10 @@ class hut(building):
 class townHall(building):
     def __init__(self, x, y, hitpoints):
         super().__init__(x, y, hitpoints) ## w=4 and h=3 
+
+class wizardTower(building):
+    def __init__(self, x, y, hitpoints, range, damage):
+        super().__init__(x, y, hitpoints)
+        self.range = range
+        self.damage = damage
+        

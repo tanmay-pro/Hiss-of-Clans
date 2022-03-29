@@ -19,11 +19,17 @@ from src.config import *
 inputs = []
 
 colorama.init(autoreset=True)
+
 gameStatus = "playing"
+
 currBarbarians = 0
+currArchers  = 0
+currBalloons = 0
 currSpellsUsed = 0
+
 frames = 0
 divideFactor = 1
+
 if __name__ == "__main__":
     orig_settings = termios.tcgetattr(sys.stdin)
     tty.setcbreak(sys.stdin)
@@ -39,6 +45,13 @@ if __name__ == "__main__":
     mainKing.assignTexture(texture)
     mainKing.assignInitialPosition(mainMap)
     mainKing.isKing = True
+
+    mainQueen = archerQueen(QUEEN_STARTING_X, QUEEN_STARTING_Y, QUEEN_HEALTH, QUEEN_SPEED, QUEEN_ATTACK)
+    texture, heightTexture, maxWidthTexture = getTexture(
+        "src/textures/archerQueen.txt")
+    mainQueen.assignHeight(heightTexture)
+    mainQueen.assignmaxWidth(maxWidthTexture)
+    mainQueen.assignTexture(texture)
 
     mainTownHall = townHall(TOWN_X_POSITION, TOWN_Y_POSITION, TOWN_HEALTH)
     texture, heightTexture, maxWidthTexture = getTexture(
@@ -91,14 +104,29 @@ if __name__ == "__main__":
         Cannon.assignTexture(texture)
         Cannon.assignPosition(mainMap)
 
+
+    arrayTowers = []
+    texture, heightTexture, maxWidthTexture = getTexture(
+        "src/textures/tower.txt")
+    tower1 = wizardTower(TOWER_1X, TOWER_1Y, TOWER_HEALTH, TOWER_DAMAGE, TOWER_RANGE)
+    tower2 = wizardTower(TOWER_2X, TOWER_2Y, TOWER_HEALTH, TOWER_DAMAGE, TOWER_RANGE)
+    arrayTowers.append(tower1)
+    arrayTowers.append(tower2)
+    for Tower in arrayTowers:
+        Tower.assignHeight(heightTexture)
+        Tower.assignmaxWidth(maxWidthTexture)
+        Tower.assignTexture(texture)
+        Tower.assignPosition(mainMap)
+
     mainMap.drawMap()
     
-    sp1 = spawningPoint(10, 10)
-    sp2 = spawningPoint(10, 20)
-    sp3 = spawningPoint(90, 15)
+    spBarbarian = []; spArcher = []; spBalloon = []
+    spBarbarian, spArcher, spBalloon = makeSpawningPoints(mainMap)
     
     arrayBarbarians = []
-    texture, heightTexture, maxWidthTexture = getTexture("src/textures/barbarian.txt")
+    arrayArchers = []
+    arrayBalloons = []
+
     while gameStatus == "playing":
         frames += 1
         startTime = time.time()
@@ -107,11 +135,22 @@ if __name__ == "__main__":
         if not mainKing.isDead:
             mainKing.displayHealth()
         print("Number of barbarians you can still spawn: " + str(MAX_BARBARIANS -currBarbarians))
+        print("Number of archers you can still spawn: " + str(MAX_ARCHERS -currArchers))
+        print("Number of balloons you can still spawn: " + str(MAX_BALLOONS -currBalloons))
         print("Number of spells you can still use: " + str(MAX_SPELLS - currSpellsUsed))
+        
         for everyBarbarian in arrayBarbarians:
             if not everyBarbarian.isDead: 
                 everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
                 everyBarbarian.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+        for everyArcher in arrayArchers:
+            if not everyArcher.isDead:
+                everyArcher.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+                # everyArcher.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+        for everyBalloon in arrayBalloons:
+            if not everyBalloon.isDead:
+                everyBalloon.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+                # everyBalloon.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
         
         if(frames % divideFactor == 0):
             for everyCannon in arrayCannons:
@@ -123,27 +162,65 @@ if __name__ == "__main__":
             time.sleep(TIMEOUT_VAL - (time.time() - startTime))
         ch = input_to(Get())
         inputs.append(ch)
+        
         if ch == "w" or ch == "a" or ch == "s" or ch == "d":
             if not mainKing.isDead:
                 mainKing.move(ch, mainMap)
         elif ch == "q":
             gameStatus = "quit"
+        
         elif ch == " ":
             if not mainKing.isDead:
                 mainKing.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+        
         elif (ch == "1" or ch=="2" or ch=="3") and currBarbarians < MAX_BARBARIANS:
             currBarbarians += 1 
             if ch == "1":
-                barbarian1 = barbarian(sp1.positionX, sp1.positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
+                barbarian1 = barbarian(spBarbarian[0].positionX, spBarbarian[0].positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
             elif ch == "2":
-                barbarian1 = barbarian(sp2.positionX, sp2.positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
+                barbarian1 = barbarian(spBarbarian[1].positionX, spBarbarian[1].positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
             elif ch=="3":
-                barbarian1 = barbarian(sp3.positionX, sp3.positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
+                barbarian1 = barbarian(spBarbarian[2].positionX, spBarbarian[2].positionY, BARBARIAN_HEALTH, BARBARIAN_SPEED, BARBARIAN_ATTACK)
             arrayBarbarians.append(barbarian1)
+            texture, heightTexture, maxWidthTexture = getTexture(
+                "src/textures/barbarian.txt")
             barbarian1.assignHeight(heightTexture)
             barbarian1.assignmaxWidth(maxWidthTexture)
             barbarian1.assignTexture(texture)
-            barbarian1.assignInitialPosition(mainMap)        
+            barbarian1.assignInitialPosition(mainMap)
+        
+        elif (ch == "4" or ch=="5" or ch=="6") and currArchers < MAX_ARCHERS:
+            currArchers +=1
+            if ch == "4":
+                archer1 = archer(spArcher[0].positionX, spArcher[0].positionY, ARCHER_HEALTH, ARCHER_SPEED, ARCHER_ATTACK, ARCHER_RANGE)
+            elif ch=="5":
+                archer1 = archer(spArcher[1].positionX, spArcher[1].positionY, ARCHER_HEALTH, ARCHER_SPEED, ARCHER_ATTACK, ARCHER_RANGE)
+            elif ch=="6":
+                archer1 = archer(spArcher[2].positionX, spArcher[2].positionY, ARCHER_HEALTH, ARCHER_SPEED, ARCHER_ATTACK, ARCHER_RANGE)
+            arrayArchers.append(archer1)
+            texture, heightTexture, maxWidthTexture = getTexture(
+                "src/textures/archer.txt")
+            archer1.assignHeight(heightTexture)
+            archer1.assignmaxWidth(maxWidthTexture)
+            archer1.assignTexture(texture)
+            archer1.assignInitialPosition(mainMap)
+        
+        elif (ch == "7" or ch=="8" or ch=="9") and currBalloons < MAX_BALLOONS:
+            currBalloons += 1
+            if ch == "7":
+                balloon1 = balloon(spBalloon[0].positionX, spBalloon[0].positionY, BALLOON_HEALTH, BALLOON_SPEED, BALLOON_ATTACK)
+            elif ch=="8":
+                balloon1 = balloon(spBalloon[1].positionX, spBalloon[1].positionY, BALLOON_HEALTH, BALLOON_SPEED, BALLOON_ATTACK)
+            elif ch=="9":
+                balloon1 = balloon(spBalloon[2].positionX, spBalloon[2].positionY, BALLOON_HEALTH, BALLOON_SPEED, BALLOON_ATTACK)
+            arrayBalloons.append(balloon1)
+            texture, heightTexture, maxWidthTexture = getTexture(
+                "src/textures/balloon.txt")
+            balloon1.assignHeight(heightTexture)
+            balloon1.assignmaxWidth(maxWidthTexture)
+            balloon1.assignTexture(texture)
+            balloon1.assignInitialPosition(mainMap)
+
         elif (ch == "r" or ch == "h") and currSpellsUsed < MAX_SPELLS:
             currSpellsUsed += 1
             if ch == "r":
@@ -158,6 +235,7 @@ if __name__ == "__main__":
             for everyBarbarian in arrayBarbarians:
                 if not everyBarbarian.isDead:
                     everyBarbarian.castSpell(Spell)
+        
         elif ch == "l":
             if not mainKing.isDead:
                 mainKing.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)            
