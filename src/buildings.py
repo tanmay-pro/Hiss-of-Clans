@@ -41,11 +41,11 @@ class building:
         else:
             return False
         
-    def checkIfUnitInRange(self, mainMap, posX, posY):
+    def checkIfUnitInRange(self, mainMap, posX, posY, specRange):
         present = False
         for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
             for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
-                if math.sqrt((i - posY)**2 + (j - posX)**2) <= AXE_RANGE:
+                if math.sqrt((i - posY)**2 + (j - posX)**2) <= specRange:
                     present = True
         if present:
             return True
@@ -113,6 +113,7 @@ class cannon(building):
         self.range = range
 
     def attack(self, mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons):
+        # The Cannon cannot attack aerial troops and hence balloons are not getting attacked
         attackX = self.positionX + mainMap.horizontalBoundary + 1
         attackY = self.positionY + mainMap.verticalBoundary + 1
         attackDone = False

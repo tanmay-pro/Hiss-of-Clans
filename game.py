@@ -26,6 +26,7 @@ currBarbarians = 0
 currArchers  = 0
 currBalloons = 0
 currSpellsUsed = 0
+chosenKing = -1
 
 frames = 0
 divideFactor = 1
@@ -45,6 +46,7 @@ if __name__ == "__main__":
     mainKing.assignTexture(texture)
     mainKing.assignInitialPosition(mainMap)
     mainKing.isKing = True
+    chosenKing = 1
 
     mainQueen = archerQueen(QUEEN_STARTING_X, QUEEN_STARTING_Y, QUEEN_HEALTH, QUEEN_SPEED, QUEEN_ATTACK)
     texture, heightTexture, maxWidthTexture = getTexture(
@@ -52,6 +54,8 @@ if __name__ == "__main__":
     mainQueen.assignHeight(heightTexture)
     mainQueen.assignmaxWidth(maxWidthTexture)
     mainQueen.assignTexture(texture)
+    mainQueen.assignInitialPosition(mainMap)
+    mainQueen.isKing = True
 
     mainTownHall = townHall(TOWN_X_POSITION, TOWN_Y_POSITION, TOWN_HEALTH)
     texture, heightTexture, maxWidthTexture = getTexture(
@@ -134,10 +138,12 @@ if __name__ == "__main__":
         mainMap.drawMap()
         if not mainKing.isDead:
             mainKing.displayHealth()
+            mainQueen.displayHealth()
         print("Number of barbarians you can still spawn: " + str(MAX_BARBARIANS -currBarbarians))
         print("Number of archers you can still spawn: " + str(MAX_ARCHERS -currArchers))
         print("Number of balloons you can still spawn: " + str(MAX_BALLOONS -currBalloons))
         print("Number of spells you can still use: " + str(MAX_SPELLS - currSpellsUsed))
+        print("Chosen King value = " + str(chosenKing))
         
         for everyBarbarian in arrayBarbarians:
             if not everyBarbarian.isDead: 
@@ -168,14 +174,29 @@ if __name__ == "__main__":
         inputs.append(ch)
         
         if ch == "w" or ch == "a" or ch == "s" or ch == "d":
-            if not mainKing.isDead:
-                mainKing.move(ch, mainMap)
+            if chosenKing == 1:                
+                if not mainKing.isDead:
+                    mainKing.move(ch, mainMap)
+            else:
+                if not mainQueen.isDead:
+                    mainQueen.move(ch, mainMap)
+
+        elif ch == "t":
+            if chosenKing == 1:
+                chosenKing = 0
+            else:
+                chosenKing = 1
+
         elif ch == "q":
             gameStatus = "quit"
         
         elif ch == " ":
-            if not mainKing.isDead:
-                mainKing.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
+            if chosenKing == 1:
+                if not mainKing.isDead:
+                    mainKing.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
+            else:
+                if not mainQueen.isDead:
+                    mainQueen.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
         
         elif (ch == "1" or ch=="2" or ch=="3") and currBarbarians < MAX_BARBARIANS:
             currBarbarians += 1 
