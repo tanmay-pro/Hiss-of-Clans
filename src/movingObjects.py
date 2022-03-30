@@ -666,6 +666,87 @@ class archer(movingObject):
 
         self.updatePosition(mainMap)
 
+    def attack(self, mainMap, townHall, huts, walls, cannons, towers):
+        attackX = self.currPositionX
+        attackY = self.currPositionY
+        attackDone = False
+
+        if not townHall.isDestroyed:
+            if townHall.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
+                townHall.deductHealth(self.damage, mainMap)
+                attackDone = True
+
+        if not attackDone:
+            for everyHut in huts:
+                if not everyHut.isDestroyed:
+                    if everyHut.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
+                        everyHut.deductHealth(self.damage, mainMap)
+                        attackDone = True
+                        break
+        
+        if not attackDone:
+            for everyWall in walls:
+                if not everyWall.isDestroyed:
+                    if everyWall.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
+                        everyWall.deductHealth(self.damage, mainMap)
+                        attackDone = True
+                        break
+        
+        if not attackDone:
+            for everyCannon in cannons:
+                if not everyCannon.isDestroyed:
+                    if everyCannon.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
+                        everyCannon.deductHealth(self.damage, mainMap)
+                        attackDone = True
+                        break
+        
+        if not attackDone:
+            for everyTower in towers:
+                if not everyTower.isDestroyed:
+                    if everyTower.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
+                        everyTower.deductHealth(self.damage, mainMap)
+                        attackDone = True
+                        break
+
+
+    def deductHealth(self, damage, mainMap):
+        self.currHealth -= damage
+        self.changeColor(mainMap)
+        if self.currHealth <= 0:
+            self.isDead = True
+            self.clearObject(mainMap)
+
+    def changeColor(self, mainMap):
+        blocks = int(self.currHealth/self.fullHealth * 10)
+        if blocks <= 2:
+            for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
+                for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
+                    if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
+                        mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary -
+                                                          self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
+                        # mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j]
+                        mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + \
+                            Style.DIM + mainMap.grid[i][j] + Style.RESET_ALL
+
+        if blocks <= 5 and blocks > 2:
+            for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
+                for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
+                    if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
+                        mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary -
+                                                          self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
+                        # mainMap.grid[i][j] = Fore.YELLOW + Back.GREEN + mainMap.grid[i][j]
+                        mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + \
+                            Style.NORMAL + mainMap.grid[i][j] + Style.RESET_ALL
+
+        if blocks <= 10 and blocks > 5:
+            for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
+                for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
+                    if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
+                        mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary -
+                                                          self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
+                        # mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j]
+                        mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + \
+                            Style.BRIGHT + mainMap.grid[i][j] + Style.RESET_ALL
 
 class balloon(movingObject):
 

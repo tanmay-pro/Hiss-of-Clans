@@ -152,7 +152,7 @@ if __name__ == "__main__":
         for everyArcher in arrayArchers:
             if not everyArcher.isDead:
                 everyArcher.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
-                # everyArcher.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+                everyArcher.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
         for everyBalloon in arrayBalloons:
             if not everyBalloon.isDead:
                 everyBalloon.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
