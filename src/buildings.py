@@ -1,17 +1,15 @@
-from src.config import *
 from src.map import *
 import math
 
 class building:
-    isDestroyed = False
-    currHealth = None
-    
+
     def __init__(self, x, y, hitpoints):
         self.positionX = x
         self.positionY = y
         self.fullHealth = hitpoints
         self.currHealth = hitpoints
         self.currForeColor = Fore.BLACK
+        self.isDestroyed = False
 
     def assignHeight(self, h):
         self.height = h
@@ -166,8 +164,7 @@ class wizardTower(building):
         super().__init__(x, y, hitpoints)
         self.range = range
         self.damage = damage        
-    
-    aoeRange = 3
+        self.aoeRange = 3
 
     def attack(self, mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons):
         attackX = self.positionX + mainMap.horizontalBoundary + 1

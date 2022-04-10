@@ -5,8 +5,6 @@ from colorama import Fore, Back, Style
 
 
 class movingObject:
-    isDead = False
-    isKing = False
 
     def __init__(self, startX, startY, health, speed, damage):
         self.startPositionX = startX
@@ -18,6 +16,8 @@ class movingObject:
         self.hitpoints = health
         self.movSpeed = speed
         self.damage = damage
+        self.isDead = False
+        self.isKing = False
 
     def assignHeight(self, h):
         self.height = h
@@ -68,10 +68,9 @@ class movingObject:
 
 class king(movingObject):
 
-    previousMove = None
-
     def __init__(self, startX, startY, health, speed, damage):
         super().__init__(startX, startY, health, speed, damage)
+        self.previousMove = None
 
     def move(self, pressedKey, mainMap):
         self.clearObject(mainMap)
@@ -197,11 +196,11 @@ class king(movingObject):
 
 
 class archerQueen(movingObject):
-    previousMove = None
-    aoeRange = 5
-
+    
     def __init__(self, startX, startY, health, speed, damage):
         super().__init__(startX, startY, health, speed, damage)
+        self.previousMove = None
+        self.aoeRange = 5
 
     def move(self, pressedKey, mainMap):
         self.clearObject(mainMap)
@@ -616,9 +615,9 @@ class archer(movingObject):
                 array = key.split(".")
                 minDistY = int(array[0])
                 minDistX = int(array[1])
-        self.decideDirection(mainMap, minDistX, minDistY)
+        self.decideDirection(mainMap, minDistX, minDistY, walls)
 
-    def decideDirection(self, mainMap, posX, posY):
+    def decideDirection(self, mainMap, posX, posY, walls):
         self.clearObject(mainMap)
         changeX = False
         changeY = False
@@ -642,6 +641,7 @@ class archer(movingObject):
                 temp = temp[-5]
                 if temp == "A":
                     self.currPositionX += 1
+                    changeX = True
 
             if posX < self.currPositionX + mainMap.horizontalBoundary:
                 temp = mainMap.grid[self.currPositionY +
@@ -649,6 +649,7 @@ class archer(movingObject):
                 temp = temp[-5]
                 if temp == "A":
                     self.currPositionX -= 1
+                    changeX = True
 
             if posY > self.currPositionY + mainMap.verticalBoundary:
                 temp = mainMap.grid[self.currPositionY + mainMap.verticalBoundary +
@@ -656,6 +657,7 @@ class archer(movingObject):
                 temp = temp[-5]
                 if temp == "A":
                     self.currPositionY += 1
+                    changeY = True
 
             if posY < self.currPositionY + mainMap.verticalBoundary:
                 temp = mainMap.grid[self.currPositionY + mainMap.verticalBoundary -
@@ -663,6 +665,10 @@ class archer(movingObject):
                 temp = temp[-5]
                 if temp == "A":
                     self.currPositionY -= 1
+                    changeY = True
+
+        if not changeX and not changeY:
+            self.imitateBarbarianattack(mainMap, walls)
 
         self.updatePosition(mainMap)
 
@@ -684,13 +690,13 @@ class archer(movingObject):
                         attackDone = True
                         break
         
-        if not attackDone:
-            for everyWall in walls:
-                if not everyWall.isDestroyed:
-                    if everyWall.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
-                        everyWall.deductHealth(self.damage, mainMap)
-                        attackDone = True
-                        break
+        # if not attackDone:
+        #     for everyWall in walls:
+        #         if not everyWall.isDestroyed:
+        #             if everyWall.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
+        #                 everyWall.deductHealth(self.damage, mainMap)
+        #                 attackDone = True
+        #                 break
         
         if not attackDone:
             for everyCannon in cannons:
@@ -707,6 +713,52 @@ class archer(movingObject):
                         everyTower.deductHealth(self.damage, mainMap)
                         attackDone = True
                         break
+
+    def imitateBarbarianattack(self, mainMap, walls):
+        # attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
+        hasAttacked = False
+        attackX = self.currPositionX
+        attackY = self.currPositionY
+
+        # mainMap.backGrid[attackX + mainMap.horizontalBoundary][attackY + mainMap.verticalBoundary] = "S"
+        attackX += 1
+        for everyWall in walls:
+            if not everyWall.isDestroyed:
+                if everyWall.checkUnit(mainMap, attackX, attackY):
+                    everyWall.deductHealth(self.damage, mainMap)
+                    hasAttacked = True
+        if hasAttacked:
+            return
+
+        attackX -= 2
+
+        for everyWall in walls:
+            if not everyWall.isDestroyed:
+                if everyWall.checkUnit(mainMap, attackX, attackY):
+                    everyWall.deductHealth(self.damage, mainMap)
+                    hasAttacked = True
+
+        if hasAttacked:
+            return
+
+        attackX += 1
+        attackY += 1
+
+        for everyWall in walls:
+            if not everyWall.isDestroyed:
+                if everyWall.checkUnit(mainMap, attackX, attackY):
+                    everyWall.deductHealth(self.damage, mainMap)
+                    hasAttacked = True
+        if hasAttacked:
+            return
+
+        attackY -= 2
+
+        for everyWall in walls:
+            if not everyWall.isDestroyed:
+                if everyWall.checkUnit(mainMap, attackX, attackY):
+                    everyWall.deductHealth(self.damage, mainMap)
+                    hasAttacked = True
 
 
     def deductHealth(self, damage, mainMap):
