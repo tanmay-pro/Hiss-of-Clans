@@ -11,12 +11,15 @@ A terminal version of Clash of Clans implemented in Python from scratch without 
 
 ## Rules of the Game
 
-* `W A S D` for movement of the King.
-* `<SPACE>` for making the king attack at the position in front of him.
+* `W A S D` for movement of the King/ Queen depending on the initially chosen character.
+* `<SPACE>` for making the king/ Queen attack (Standard Attacks).
 * `1 2 3` are the three differet keys for spawning the barbarians.
+* `4 5 6` are the three different keys for spawning the archers.
+* `7 8 9` are the three different keys for spawning the balloons.
 * Pressing `r` deploys the rage spell.
 * Pressing `h` deploys the healing spell.
 * Pressing `l` will make the king use his leviathan axe (Damage on a larger area inside a particular range).
+* Pressing `k` makes the Queen use it's special Eagle Arrow attack (Damage in a larger range and at a farther distance).
 * To Win the game you have to strategically destroy all the non-wall buildings.
 * You will lose the game if all active troops die.
 

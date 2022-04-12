@@ -737,13 +737,7 @@ class archer(movingObject):
         attackY = self.currPositionY
         attackDone = False
 
-        if not townHall.isDestroyed:
-            if townHall.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
-                townHall.deductHealth(self.damage, mainMap)
-                attackDone = True
-
-        if not attackDone:
-            for everyCannon in cannons:
+        for everyCannon in cannons:
                 if not everyCannon.isDestroyed:
                     if everyCannon.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
                         everyCannon.deductHealth(self.damage, mainMap)
@@ -757,6 +751,12 @@ class archer(movingObject):
                         everyTower.deductHealth(self.damage, mainMap)
                         attackDone = True
                         break
+        
+        if not attackDone:
+            if not townHall.isDestroyed:
+                if townHall.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
+                    townHall.deductHealth(self.damage, mainMap)
+                    attackDone = True
         
         if not attackDone:
             for everyHut in huts:

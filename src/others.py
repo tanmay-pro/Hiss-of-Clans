@@ -51,22 +51,22 @@ def checkGameStatus(mainMap, mainTownHall, arrayHuts, arrayCannons, mainKing, ar
 
 def makeSpawningPoints(mainMap):
     spBarbarian = []
-    sp1 = spawningPoint(10, 10)
-    sp2 = spawningPoint(10, 20)
+    sp1 = spawningPoint(5, 5)
+    sp2 = spawningPoint(40, 2)
     sp3 = spawningPoint(90, 15)
     spBarbarian.append(sp1)
     spBarbarian.append(sp2)
     spBarbarian.append(sp3)
     spArcher = []
-    sp1 = spawningPoint(10, 15)
-    sp2 = spawningPoint(10, 25)
-    sp3 = spawningPoint(85, 15)
+    sp1 = spawningPoint(5, 15)
+    sp2 = spawningPoint(80, 2)
+    sp3 = spawningPoint(45, 28)
     spArcher.append(sp1)
     spArcher.append(sp2)
     spArcher.append(sp3)
     spBalloon = []
-    sp1 = spawningPoint(5, 15)
-    sp2 = spawningPoint(5, 25)
+    sp1 = spawningPoint(90, 25)
+    sp2 = spawningPoint(100, 2)
     sp3 = spawningPoint(85, 20)
     spBalloon.append(sp1)
     spBalloon.append(sp2)
