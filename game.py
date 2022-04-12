@@ -209,10 +209,11 @@ if __name__ == "__main__":
             print("Chosen King value = " + str(chosenKing))
             print("Current level = " + str(currLevel))
             
-            for everyBarbarian in arrayBarbarians:
-                if not everyBarbarian.isDead: 
-                    everyBarbarian.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
-                    everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
+            if frames % 2 ==0:
+                for everyBarbarian in arrayBarbarians:
+                    if not everyBarbarian.isDead: 
+                        everyBarbarian.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
+                        everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
             for everyArcher in arrayArchers:
                 if not everyArcher.isDead:
                     if not everyArcher.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers):
@@ -327,6 +328,11 @@ if __name__ == "__main__":
             elif ch == "l":
                 if not mainKing.isDead:
                     mainKing.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers, AXE_RANGE)    
+            
+            elif ch == "k":
+                if not mainQueen.isDead:
+                    time.sleep(1)
+                    mainQueen.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
 
             elif ch== "p":
                 currLevel += 1

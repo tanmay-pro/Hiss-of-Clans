@@ -105,7 +105,7 @@ class building:
                         if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
                             mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX]
                             mainMap.grid[i][j] = self.currBackColor + Fore.BLUE + mainMap.grid[i][j]
-                            self.currForeColor = Fore.BLUE
+                            self.currForeColor = Fore.BLUE  
         
 # Each building below shows inheritance
 class cannon(building): 

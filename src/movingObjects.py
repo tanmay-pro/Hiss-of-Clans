@@ -204,6 +204,7 @@ class archerQueen(movingObject):
         super().__init__(startX, startY, health, speed, damage)
         self.previousMove = None
         self.aoeRange = 5
+        self.aoeRangeMajor = 9
 
     def move(self, pressedKey, mainMap):
         self.clearObject(mainMap)
@@ -290,6 +291,27 @@ class archerQueen(movingObject):
                 if everyTower.checkIfUnitInRange(mainMap, posX, posY, self.aoeRange):
                     everyTower.deductHealth(self.damage, mainMap)
 
+    def performAttackMajor(self, mainMap, townHall, huts, walls, cannons, towers, posX, posY):
+        if not townHall.isDestroyed:
+            if townHall.checkIfUnitInRange(mainMap, posX, posY, self.aoeRangeMajor):
+                townHall.deductHealth(self.damage, mainMap)
+        for everyHut in huts:
+            if not everyHut.isDestroyed:
+                if everyHut.checkIfUnitInRange(mainMap, posX, posY, self.aoeRangeMajor):
+                    everyHut.deductHealth(self.damage, mainMap)
+        for everyWall in walls:
+            if not everyWall.isDestroyed:
+                if everyWall.checkIfUnitInRange(mainMap, posX, posY, self.aoeRangeMajor):
+                    everyWall.deductHealth(self.damage, mainMap)
+        for everyCannon in cannons:
+            if not everyCannon.isDestroyed:
+                if everyCannon.checkIfUnitInRange(mainMap, posX, posY, self.aoeRangeMajor):
+                    everyCannon.deductHealth(self.damage, mainMap)
+        for everyTower in towers:
+            if not everyTower.isDestroyed:
+                if everyTower.checkIfUnitInRange(mainMap, posX, posY, self.aoeRangeMajor):
+                    everyTower.deductHealth(self.damage, mainMap)
+
     def attack(self, mainMap, townHall, huts, walls, cannons, towers):
         attackX = self.currPositionX
         attackY = self.currPositionY
@@ -347,6 +369,23 @@ class archerQueen(movingObject):
         #                                walls, cannons, towers, attackX, attackY)
         #             break
 
+    def attackMajor(self, mainMap, townHall, huts, walls, cannons, towers):
+        attackX = self.currPositionX
+        attackY = self.currPositionY
+
+        if self.previousMove == "d":
+            attackX += 16
+        elif self.previousMove == "s":
+            attackY += 16
+        elif self.previousMove == "a":
+            attackX -= 16
+        elif self.previousMove == "w":
+            attackY -= 16
+        
+        # If we want to attack irrespective of building present 8 tiles far
+
+        self.performAttackMajor(mainMap, townHall, huts, walls, cannons, towers, attackX, attackY)
+    
 
 class barbarian(movingObject):
 
