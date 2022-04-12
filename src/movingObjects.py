@@ -469,12 +469,9 @@ class barbarian(movingObject):
 
 
     def attack(self, mainMap, townHall, huts, walls, cannons, towers):
-        # attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
         hasAttacked = False
         attackX = self.currPositionX
         attackY = self.currPositionY
-
-        # mainMap.backGrid[attackX + mainMap.horizontalBoundary][attackY + mainMap.verticalBoundary] = "S"
         attackX += 1
 
         if not townHall.isDestroyed:
@@ -502,7 +499,7 @@ class barbarian(movingObject):
                     everyTower.deductHealth(self.damage, mainMap)
                     hasAttacked = True
         if hasAttacked:
-            return
+            return True
 
         attackX -= 2
 
@@ -532,7 +529,7 @@ class barbarian(movingObject):
                     hasAttacked = True
 
         if hasAttacked:
-            return
+            return True
 
         attackX += 1
         attackY += 1
@@ -563,7 +560,7 @@ class barbarian(movingObject):
                     hasAttacked = True
 
         if hasAttacked:
-            return
+            return True
 
         attackY -= 2
 
@@ -591,6 +588,11 @@ class barbarian(movingObject):
                 if everyTower.checkUnit(mainMap, attackX, attackY):
                     everyTower.deductHealth(self.damage, mainMap)
                     hasAttacked = True
+        
+        if hasAttacked:
+            return True
+        
+        return False
 
 
 class archer(movingObject):
@@ -695,22 +697,6 @@ class archer(movingObject):
                 attackDone = True
 
         if not attackDone:
-            for everyHut in huts:
-                if not everyHut.isDestroyed:
-                    if everyHut.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
-                        everyHut.deductHealth(self.damage, mainMap)
-                        attackDone = True
-                        break
-
-        # if not attackDone:
-        #     for everyWall in walls:
-        #         if not everyWall.isDestroyed:
-        #             if everyWall.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
-        #                 everyWall.deductHealth(self.damage, mainMap)
-        #                 attackDone = True
-        #                 break
-
-        if not attackDone:
             for everyCannon in cannons:
                 if not everyCannon.isDestroyed:
                     if everyCannon.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
@@ -725,6 +711,19 @@ class archer(movingObject):
                         everyTower.deductHealth(self.damage, mainMap)
                         attackDone = True
                         break
+        
+        if not attackDone:
+            for everyHut in huts:
+                if not everyHut.isDestroyed:
+                    if everyHut.checkIfUnitInRange(mainMap, attackX, attackY, self.range):
+                        everyHut.deductHealth(self.damage, mainMap)
+                        attackDone = True
+                        break
+        
+        if not attackDone:
+            return False
+        else:
+            return True
 
     def imitateBarbarianattack(self, mainMap, walls):
         # attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
@@ -965,3 +964,8 @@ class balloon(movingObject):
                     if everyHut.checkUnit(mainMap, attackX, attackY):
                         everyHut.deductHealth(self.damage, mainMap)
                         hasAttacked = True
+        
+        if hasAttacked:
+            return True
+        else:
+            return False

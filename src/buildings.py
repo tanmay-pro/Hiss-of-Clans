@@ -9,6 +9,7 @@ class building:
         self.fullHealth = hitpoints
         self.currHealth = hitpoints
         self.currForeColor = Fore.BLACK
+        self.currBackColor = Back.GREEN
         self.isDestroyed = False
 
     def assignHeight(self, h):
@@ -79,6 +80,7 @@ class building:
                     if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
                         mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX]
                         mainMap.grid[i][j] = Back.RED + self.currForeColor + mainMap.grid[i][j]
+                        self.currBackColor = Back.RED
     
         if blocks <= 5 and blocks > 2:
             for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
@@ -86,13 +88,15 @@ class building:
                     if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
                         mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX]
                         mainMap.grid[i][j] = Back.YELLOW + self.currForeColor + mainMap.grid[i][j]
+                        self.currBackColor = Back.YELLOW
 
         if blocks <= 10 and blocks > 5:
             for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
                 for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
                     if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
                         mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX]
-                        mainMap.grid[i][j] = Back.GREEN + self.currForeColor + mainMap.grid[i][j]  
+                        mainMap.grid[i][j] = Back.GREEN + self.currForeColor + mainMap.grid[i][j]
+                        self.currBackColor = Back.GREEN
     
     # The get Color function is only for cannons and wizard troops ( Their color should change when they attack )
     def getColor(self, mainMap):
@@ -100,7 +104,7 @@ class building:
                     for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
                         if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
                             mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX]
-                            mainMap.grid[i][j] = Back.GREEN + Fore.BLUE + mainMap.grid[i][j]
+                            mainMap.grid[i][j] = self.currBackColor + Fore.BLUE + mainMap.grid[i][j]
                             self.currForeColor = Fore.BLUE
         
 # Each building below shows inheritance

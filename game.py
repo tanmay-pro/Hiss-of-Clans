@@ -211,26 +211,24 @@ if __name__ == "__main__":
             
             for everyBarbarian in arrayBarbarians:
                 if not everyBarbarian.isDead: 
-                    everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
                     everyBarbarian.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
+                    everyBarbarian.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
             for everyArcher in arrayArchers:
                 if not everyArcher.isDead:
-                    everyArcher.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
-                    everyArcher.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
+                    if not everyArcher.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers):
+                        everyArcher.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
             for everyBalloon in arrayBalloons:
                 if not everyBalloon.isDead:
-                    everyBalloon.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
-                    everyBalloon.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
-                    # mainMap.reconstructMap(mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)
-            
+                    if not everyBalloon.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers):
+                        everyBalloon.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
+                  
             if(frames % attackFactorBuilding == 0):
                 for everyCannon in arrayCannons:
                     if not everyCannon.isDestroyed:
-                        everyCannon.assignPosition(mainMap)
+                        everyCannon.changeColor(mainMap)
                         everyCannon.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)    
                 for everyTower in arrayTowers:
                     if not everyTower.isDestroyed:
-                        everyTower.assignPosition(mainMap)
                         everyTower.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)
 
             if TIMEOUT_VAL > (time.time() - startTime):
@@ -309,7 +307,6 @@ if __name__ == "__main__":
                 balloon1.assignHeight(heightTexture)
                 balloon1.assignmaxWidth(maxWidthTexture)
                 balloon1.assignTexture(texture)
-                # balloon1.assignInitialPosition(mainMap)
                 balloon1.assignPositionAir(mainMap)
 
             elif (ch == "r" or ch == "h") and currSpellsUsed < MAX_SPELLS:
