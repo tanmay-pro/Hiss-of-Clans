@@ -1,8 +1,8 @@
+from re import S
 from src.spells import *
 from src.map import *
 from src.others import *
 from colorama import Fore, Back, Style
-
 
 class movingObject:
 
@@ -18,6 +18,7 @@ class movingObject:
         self.damage = damage
         self.isDead = False
         self.isKing = False
+        # self.currColor = None
 
     def assignHeight(self, h):
         self.height = h
@@ -38,7 +39,7 @@ class movingObject:
                         Back.GREEN + mainMap.grid[i][j]
                     if not self.isKing:
                         mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + \
-                            Style.BRIGHT + mainMap.grid[i][j] + Style.RESET_ALL
+                            Style.BRIGHT + mainMap.grid[i][j] + Style.RESET_ALL    
 
     def updatePosition(self, mainMap):
         for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
@@ -48,7 +49,9 @@ class movingObject:
                                                       self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
                     mainMap.grid[i][j] = Fore.BLACK + \
                         Back.GREEN + mainMap.grid[i][j]
+                    # self.currColor = Fore.BLACK + Back.GREEN
                     if not self.isKing:
+                        # self.currColor = Fore.BLACK + Back.GREEN + Style.BRIGHT
                         mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + \
                             Style.BRIGHT + mainMap.grid[i][j] + Style.RESET_ALL
 
@@ -170,7 +173,7 @@ class king(movingObject):
                 if everyTower.checkUnit(mainMap, attackX, attackY):
                     everyTower.deductHealth(self.damage, mainMap)
 
-    def attackMajor(self, mainMap, townHall, huts, walls, cannons, towers):
+    def attackMajor(self, mainMap, townHall, huts, walls, cannons, towers, AXE_RANGE):
         attackX = self.currPositionX
         attackY = self.currPositionY
 
@@ -196,7 +199,7 @@ class king(movingObject):
 
 
 class archerQueen(movingObject):
-    
+
     def __init__(self, startX, startY, health, speed, damage):
         super().__init__(startX, startY, health, speed, damage)
         self.previousMove = None
@@ -303,35 +306,39 @@ class archerQueen(movingObject):
         if not townHall.isDestroyed:
             if townHall.checkUnit(mainMap, attackX, attackY):
                 # townHall.deductHealth(self.damage, mainMap)
-                self.performAttack(mainMap, townHall, huts, walls, cannons, towers, attackX, attackY)
+                self.performAttack(mainMap, townHall, huts,
+                                   walls, cannons, towers, attackX, attackY)
         for everyHut in huts:
             if not everyHut.isDestroyed:
                 if everyHut.checkUnit(mainMap, attackX, attackY):
                     # everyHut.deductHealth(self.damage, mainMap)
-                    self.performAttack(mainMap, townHall, huts, walls, cannons, towers, attackX, attackY)
+                    self.performAttack(mainMap, townHall, huts,
+                                       walls, cannons, towers, attackX, attackY)
                     break
 
         for everyWall in walls:
             if not everyWall.isDestroyed:
                 if everyWall.checkUnit(mainMap, attackX, attackY):
                     # everyWall.deductHealth(self.damage, mainMap)
-                    self.performAttack(mainMap, townHall, huts, walls, cannons, towers, attackX, attackY)
+                    self.performAttack(mainMap, townHall, huts,
+                                       walls, cannons, towers, attackX, attackY)
                     break
-        
+
         for everyCannon in cannons:
             if not everyCannon.isDestroyed:
                 if everyCannon.checkUnit(mainMap, attackX, attackY):
                     # everyCannon.deductHealth(self.damage, mainMap)
-                    self.performAttack(mainMap, townHall, huts, walls, cannons, towers, attackX, attackY)
+                    self.performAttack(mainMap, townHall, huts,
+                                       walls, cannons, towers, attackX, attackY)
                     break
 
         for everyTower in towers:
             if not everyTower.isDestroyed:
                 if everyTower.checkUnit(mainMap, attackX, attackY):
                     # everyTower.deductHealth(self.damage, mainMap)
-                    self.performAttack(mainMap, townHall, huts, walls, cannons, towers, attackX, attackY)
+                    self.performAttack(mainMap, townHall, huts,
+                                       walls, cannons, towers, attackX, attackY)
                     break
-
 
 
 class barbarian(movingObject):
@@ -433,6 +440,7 @@ class barbarian(movingObject):
                         mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary -
                                                           self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
                         # mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j]
+                        # self.currColor = Fore.BLACK + Back.GREEN + Style.DIM
                         mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + \
                             Style.DIM + mainMap.grid[i][j] + Style.RESET_ALL
 
@@ -443,8 +451,10 @@ class barbarian(movingObject):
                         mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary -
                                                           self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
                         # mainMap.grid[i][j] = Fore.YELLOW + Back.GREEN + mainMap.grid[i][j]
+                        # self.currColor = Fore.BLACK + Back.GREEN + Style.NORMAL
                         mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + \
                             Style.NORMAL + mainMap.grid[i][j] + Style.RESET_ALL
+
 
         if blocks <= 10 and blocks > 5:
             for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
@@ -453,8 +463,10 @@ class barbarian(movingObject):
                         mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary -
                                                           self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
                         # mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j]
+                        # self.currColor = Fore.BLACK + Back.GREEN + Style.BRIGHT
                         mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + \
                             Style.BRIGHT + mainMap.grid[i][j] + Style.RESET_ALL
+
 
     def attack(self, mainMap, townHall, huts, walls, cannons, towers):
         # attackX, attackY = getSwordPosition(self.currPositionX, self.currPositionY)
@@ -689,7 +701,7 @@ class archer(movingObject):
                         everyHut.deductHealth(self.damage, mainMap)
                         attackDone = True
                         break
-        
+
         # if not attackDone:
         #     for everyWall in walls:
         #         if not everyWall.isDestroyed:
@@ -697,7 +709,7 @@ class archer(movingObject):
         #                 everyWall.deductHealth(self.damage, mainMap)
         #                 attackDone = True
         #                 break
-        
+
         if not attackDone:
             for everyCannon in cannons:
                 if not everyCannon.isDestroyed:
@@ -705,7 +717,7 @@ class archer(movingObject):
                         everyCannon.deductHealth(self.damage, mainMap)
                         attackDone = True
                         break
-        
+
         if not attackDone:
             for everyTower in towers:
                 if not everyTower.isDestroyed:
@@ -760,7 +772,6 @@ class archer(movingObject):
                     everyWall.deductHealth(self.damage, mainMap)
                     hasAttacked = True
 
-
     def deductHealth(self, damage, mainMap):
         self.currHealth -= damage
         self.changeColor(mainMap)
@@ -777,8 +788,10 @@ class archer(movingObject):
                         mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary -
                                                           self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
                         # mainMap.grid[i][j] = Fore.RED + Back.GREEN + mainMap.grid[i][j]
+                        # self.currColor = Fore.BLACK + Back.GREEN + Style.DIM
                         mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + \
                             Style.DIM + mainMap.grid[i][j] + Style.RESET_ALL
+
 
         if blocks <= 5 and blocks > 2:
             for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
@@ -787,6 +800,7 @@ class archer(movingObject):
                         mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary -
                                                           self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
                         # mainMap.grid[i][j] = Fore.YELLOW + Back.GREEN + mainMap.grid[i][j]
+                        # self.currColor = Fore.BLACK + Back.GREEN + Style.NORMAL
                         mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + \
                             Style.NORMAL + mainMap.grid[i][j] + Style.RESET_ALL
 
@@ -797,10 +811,157 @@ class archer(movingObject):
                         mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary -
                                                           self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
                         # mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + mainMap.grid[i][j]
+                        # self.currColor = Fore.BLACK + Back.GREEN + Style.BRIGHT
                         mainMap.grid[i][j] = Fore.BLACK + Back.GREEN + \
                             Style.BRIGHT + mainMap.grid[i][j] + Style.RESET_ALL
+
 
 class balloon(movingObject):
 
     def __init__(self, startX, startY, health, speed, damage):
         super().__init__(startX, startY, health, speed, damage)
+
+    def deductHealth(self, damage, mainMap):
+        self.currHealth -= damage
+        self.changeColorAir(mainMap)
+        if self.currHealth <= 0:
+            self.isDead = True
+            self.clearObjectAir(mainMap)
+
+    def clearObjectAir(self, mainMap):
+        for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
+            for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
+                if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
+                    mainMap.airGrid[i][j] = " "
+
+    def assignPositionAir(self, mainMap):
+        for i in range(mainMap.verticalBoundary + self.startPositionY, self.height + mainMap.verticalBoundary + self.startPositionY):
+            for j in range(mainMap.horizontalBoundary + self.startPositionX, len(self.texture[i - mainMap.verticalBoundary - self.startPositionY]) + mainMap.horizontalBoundary + self.startPositionX):
+                if self.texture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX] != "\n":
+                    mainMap.airGrid[i][j] = self.texture[i-mainMap.verticalBoundary - self.startPositionY][j-mainMap.horizontalBoundary - self.startPositionX]
+                    mainMap.airGrid[i][j] = Fore.BLACK + Back.GREEN + mainMap.airGrid[i][j]
+                    mainMap.airGrid[i][j] = Fore.BLACK + Back.GREEN + Style.BRIGHT + mainMap.airGrid[i][j] + Style.RESET_ALL 
+
+    def updatePositionAir(self, mainMap):
+        for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
+            for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
+                if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
+                    mainMap.airGrid[i][j] = self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
+                    mainMap.airGrid[i][j] = Fore.BLACK + Back.GREEN + mainMap.airGrid[i][j]
+                    mainMap.airGrid[i][j] = Fore.BLACK + Back.GREEN + Style.BRIGHT + mainMap.airGrid[i][j] + Style.RESET_ALL   
+
+    def changeColorAir(self, mainMap):
+        blocks = int(self.currHealth/self.fullHealth * 10)
+        if blocks <= 2:
+            for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
+                for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
+                    if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
+                        mainMap.airGrid[i][j] = self.texture[i-mainMap.verticalBoundary -
+                                                          self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
+                        mainMap.airGrid[i][j] = Fore.BLACK + Back.GREEN + \
+                            Style.DIM + mainMap.airGrid[i][j] + Style.RESET_ALL
+
+        if blocks <= 5 and blocks > 2:
+            for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
+                for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
+                    if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
+                        mainMap.airGrid[i][j] = self.texture[i-mainMap.verticalBoundary -
+                                                          self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
+                        mainMap.airGrid[i][j] = Fore.BLACK + Back.GREEN + \
+                            Style.NORMAL + mainMap.airGrid[i][j] + Style.RESET_ALL
+
+        if blocks <= 10 and blocks > 5:
+            for i in range(mainMap.verticalBoundary + self.currPositionY, self.height + mainMap.verticalBoundary + self.currPositionY):
+                for j in range(mainMap.horizontalBoundary + self.currPositionX, len(self.texture[i - mainMap.verticalBoundary - self.currPositionY]) + mainMap.horizontalBoundary + self.currPositionX):
+                    if self.texture[i-mainMap.verticalBoundary - self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX] != "\n":
+                        mainMap.airGrid[i][j] = self.texture[i-mainMap.verticalBoundary -
+                                                          self.currPositionY][j-mainMap.horizontalBoundary - self.currPositionX]
+                        mainMap.airGrid[i][j] = Fore.BLACK + Back.GREEN + \
+                            Style.BRIGHT + mainMap.airGrid[i][j] + Style.RESET_ALL
+
+    def move(self, mainMap, townHall, huts, walls, cannons, towers):
+
+        allDefensiveDestroyed = True
+        for everyCannon in cannons:
+            if not everyCannon.isDestroyed:
+                allDefensiveDestroyed = False
+                break
+        for everyTower in towers:
+            if not everyTower.isDestroyed:
+                allDefensiveDestroyed = False
+                break
+
+        dist = {}
+
+        if allDefensiveDestroyed:
+            if not townHall.isDestroyed:
+                townHall.getDistances(
+                    mainMap, dist, self.currPositionX, self.currPositionY)
+            for everyHut in huts:
+                if not everyHut.isDestroyed:
+                    everyHut.getDistances(
+                        mainMap, dist, self.currPositionX, self.currPositionY)
+        else:
+            for everyCannon in cannons:
+                if not everyCannon.isDestroyed:
+                    everyCannon.getDistances(
+                        mainMap, dist, self.currPositionX, self.currPositionY)
+            for everyTower in towers:
+                if not everyTower.isDestroyed:
+                    everyTower.getDistances(
+                        mainMap, dist, self.currPositionX, self.currPositionY)
+
+        minDist = 1e7
+        minDistX = -1
+        minDistY = -1
+
+        for key, value in dist.items():
+            if value < minDist:
+                minDist = value
+                array = key.split(".")
+                minDistY = int(array[0])
+                minDistX = int(array[1])
+        self.decideDirection(mainMap, minDistX, minDistY)
+
+    def decideDirection(self, mainMap, posX, posY):
+        self.clearObjectAir(mainMap)
+        if posX > self.currPositionX + mainMap.horizontalBoundary and mainMap.grid[self.currPositionY + mainMap.verticalBoundary][self.currPositionX + mainMap.horizontalBoundary + self.maxWidth] != Back.YELLOW + Fore.YELLOW + " ":
+            self.currPositionX += 1
+        elif posX < self.currPositionX + mainMap.horizontalBoundary and mainMap.grid[self.currPositionY + mainMap.verticalBoundary][self.currPositionX + mainMap.horizontalBoundary - 1] != Back.YELLOW + Fore.YELLOW + " ":
+            self.currPositionX -= 1
+        if posY > self.currPositionY + mainMap.verticalBoundary and mainMap.grid[self.currPositionY + mainMap.verticalBoundary + self.height][self.currPositionX + mainMap.horizontalBoundary] != Back.YELLOW + Fore.YELLOW + " ":
+            self.currPositionY += 1
+        elif posY < self.currPositionY + mainMap.verticalBoundary and mainMap.grid[self.currPositionY + mainMap.verticalBoundary - 1][self.currPositionX + mainMap.horizontalBoundary] != Back.YELLOW + Fore.YELLOW + " ":
+            self.currPositionY -= 1
+        self.updatePositionAir(mainMap)
+
+    def attack(self, mainMap, townHall, huts, walls, cannons, towers):
+        attackX = self.currPositionX
+        attackY = self.currPositionY
+        hasAttacked = False
+
+        for everyCannon in cannons:
+            if not everyCannon.isDestroyed:
+                if everyCannon.checkUnit(mainMap, attackX, attackY):
+                    everyCannon.deductHealth(self.damage, mainMap)
+                    hasAttacked = True
+
+        if not hasAttacked:
+            for everyTower in towers:
+                if not everyTower.isDestroyed:
+                    if everyTower.checkUnit(mainMap, attackX, attackY):
+                        everyTower.deductHealth(self.damage, mainMap)
+                        hasAttacked = True
+
+        if not hasAttacked:
+            if not townHall.isDestroyed:
+                if townHall.checkUnit(mainMap, attackX, attackY):
+                    townHall.deductHealth(self.damage, mainMap)
+                    hasAttacked = True
+
+        if not hasAttacked:
+            for everyHut in huts:
+                if not everyHut.isDestroyed:
+                    if everyHut.checkUnit(mainMap, attackX, attackY):
+                        everyHut.deductHealth(self.damage, mainMap)
+                        hasAttacked = True

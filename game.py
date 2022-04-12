@@ -185,7 +185,7 @@ if __name__ == "__main__":
             Tower.assignTexture(texture)
             Tower.assignPosition(mainMap)
 
-        mainMap.drawMap()
+        mainMap.drawMap2()
         
         spBarbarian = []; spArcher = []; spBalloon = []
         spBarbarian, spArcher, spBalloon = makeSpawningPoints(mainMap)
@@ -198,7 +198,7 @@ if __name__ == "__main__":
             frames += 1
             startTime = time.time()
             os.system("cls" if os.name == "nt" else "clear")
-            mainMap.drawMap()
+            mainMap.drawMap2()
             if not mainKing.isDead:
                 mainKing.displayHealth()
                 mainQueen.displayHealth()
@@ -220,7 +220,8 @@ if __name__ == "__main__":
             for everyBalloon in arrayBalloons:
                 if not everyBalloon.isDead:
                     everyBalloon.move(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
-                    # everyBalloon.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons)
+                    everyBalloon.attack(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
+                    # mainMap.reconstructMap(mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)
             
             if(frames % attackFactorBuilding == 0):
                 for everyCannon in arrayCannons:
@@ -308,7 +309,8 @@ if __name__ == "__main__":
                 balloon1.assignHeight(heightTexture)
                 balloon1.assignmaxWidth(maxWidthTexture)
                 balloon1.assignTexture(texture)
-                balloon1.assignInitialPosition(mainMap)
+                # balloon1.assignInitialPosition(mainMap)
+                balloon1.assignPositionAir(mainMap)
 
             elif (ch == "r" or ch == "h") and currSpellsUsed < MAX_SPELLS:
                 currSpellsUsed += 1
@@ -327,7 +329,7 @@ if __name__ == "__main__":
             
             elif ch == "l":
                 if not mainKing.isDead:
-                    mainKing.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)    
+                    mainKing.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers, AXE_RANGE)    
 
             elif ch== "p":
                 currLevel += 1

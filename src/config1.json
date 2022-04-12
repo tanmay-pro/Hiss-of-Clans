@@ -57,6 +57,6 @@
     "max_barbarians": 20,
     "max_archers": 20,
     "max_balloons": 6,
-    "timeout_val": 0.1,
+    "timeout_val": 0.05,
     "max_spells": 2
 }
