@@ -19,18 +19,27 @@ inputs = []
 
 colorama.init(autoreset=True)
 currLevel = 1
-
 if __name__ == "__main__":
     while currLevel != 4:
+        os.system("cls" if os.name == "nt" else "clear")
+        char = input("What do you want to play with King(K) or Queen(Q)? Press K for King and Q for Queen\n")
         orig_settings = termios.tcgetattr(sys.stdin)
         tty.setcbreak(sys.stdin)
-        os.system("cls" if os.name == "nt" else "clear")
         gameStatus = "playing"
+
         currBarbarians = 0
         currArchers  = 0
         currBalloons = 0
         currSpellsUsed = 0
         chosenKing = -1
+        if char == "K" or char == "k":
+            chosenKing = 1
+        elif char == "Q" or char == "q":
+            chosenKing = 0
+        else:
+            print("Invalid input. By default, king has been selected!")
+            time.sleep(2)
+            chosenKing = 1
         frames = 0
         attackFactorBuilding = 1
 
@@ -101,26 +110,25 @@ if __name__ == "__main__":
 
         mainMap = map(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, GAME_HORIZONTAL_BOUNDARY, GAME_VERTICAL_BOUNDARY)
         mainMap.createMap()
-
         mainKing = king(KING_STARTING_X, KING_STARTING_Y, KING_HEALTH, KING_SPEED, KING_ATTACK)
-        texture, heightTexture, maxWidthTexture = getTexture(
-            "src/textures/king.txt")
+        texture, heightTexture, maxWidthTexture = getTexture("src/textures/king.txt")
         mainKing.assignHeight(heightTexture)
         mainKing.assignmaxWidth(maxWidthTexture)
         mainKing.assignTexture(texture)
-        mainKing.assignInitialPosition(mainMap)
         mainKing.isKing = True
-        chosenKing = 1
-
+        
         mainQueen = archerQueen(QUEEN_STARTING_X, QUEEN_STARTING_Y, QUEEN_HEALTH, QUEEN_SPEED, QUEEN_ATTACK)
-        texture, heightTexture, maxWidthTexture = getTexture(
-            "src/textures/archerQueen.txt")
+        texture, heightTexture, maxWidthTexture = getTexture("src/textures/archerQueen.txt")
         mainQueen.assignHeight(heightTexture)
         mainQueen.assignmaxWidth(maxWidthTexture)
         mainQueen.assignTexture(texture)
-        mainQueen.assignInitialPosition(mainMap)
         mainQueen.isKing = True
 
+        if chosenKing == 1:
+            mainKing.assignInitialPosition(mainMap)
+        else:            
+            mainQueen.assignInitialPosition(mainMap)
+        
         mainTownHall = townHall(TOWN_X_POSITION, TOWN_Y_POSITION, TOWN_HEALTH)
         texture, heightTexture, maxWidthTexture = getTexture(
             "src/textures/townHall.txt")
@@ -200,13 +208,15 @@ if __name__ == "__main__":
             os.system("cls" if os.name == "nt" else "clear")
             mainMap.drawMap2()
             if not mainKing.isDead:
-                mainKing.displayHealth()
-                mainQueen.displayHealth()
+                if chosenKing == 1:
+                    mainKing.displayHealth()
+                else:
+                    mainQueen.displayHealth()
             print("Number of barbarians you can still spawn: " + str(MAX_BARBARIANS -currBarbarians))
             print("Number of archers you can still spawn: " + str(MAX_ARCHERS -currArchers))
             print("Number of balloons you can still spawn: " + str(MAX_BALLOONS -currBalloons))
             print("Number of spells you can still use: " + str(MAX_SPELLS - currSpellsUsed))
-            print("Chosen King value = " + str(chosenKing))
+            # print("Chosen King value = " + str(chosenKing))
             print("Current level = " + str(currLevel))
             
             if frames % 2 ==0:
@@ -227,11 +237,11 @@ if __name__ == "__main__":
                 for everyCannon in arrayCannons:
                     if not everyCannon.isDestroyed:
                         everyCannon.spawnAgain(mainMap)
-                        everyCannon.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)    
+                        everyCannon.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons, chosenKing)    
                 for everyTower in arrayTowers:
                     if not everyTower.isDestroyed:
                         everyTower.spawnAgain(mainMap)
-                        everyTower.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)
+                        everyTower.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons, chosenKing)
 
             if TIMEOUT_VAL > (time.time() - startTime):
                 time.sleep(TIMEOUT_VAL - (time.time() - startTime))
@@ -245,12 +255,6 @@ if __name__ == "__main__":
                 else:
                     if not mainQueen.isDead:
                         mainQueen.move(ch, mainMap)
-
-            elif ch == "t":
-                if chosenKing == 1:
-                    chosenKing = 0
-                else:
-                    chosenKing = 1
 
             elif ch == "q":
                 gameStatus = "quit"
@@ -326,12 +330,12 @@ if __name__ == "__main__":
                     if not everyBarbarian.isDead:
                         everyBarbarian.castSpell(Spell)
             
-            elif ch == "l":
+            elif ch == "l" and chosenKing == 1:
                 if not mainKing.isDead:
                     mainKing.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers, AXE_RANGE)    
             
             elif ch == "k":
-                if not mainQueen.isDead:
+                if not mainQueen.isDead and chosenKing == 0:
                     time.sleep(1)
                     mainQueen.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
 
@@ -342,7 +346,7 @@ if __name__ == "__main__":
             sys.stdin.flush()
             sys.stdout.flush()
             returnVal = checkGameStatus(
-                    mainMap, mainTownHall, arrayHuts, arrayCannons, mainKing, arrayBarbarians)
+                    mainMap, mainTownHall, arrayHuts, arrayCannons, mainKing, arrayBarbarians, mainQueen, chosenKing)
             if returnVal == 0:
                 gameStatus = "lost"
             elif returnVal == 1:

@@ -24,7 +24,7 @@ def getSwordPosition(posX, posY):
     posX += 4
     return posX, posY
 
-def checkGameStatus(mainMap, mainTownHall, arrayHuts, arrayCannons, mainKing, arrayBarbarians):
+def checkGameStatus(mainMap, mainTownHall, arrayHuts, arrayCannons, mainKing, arrayBarbarians, mainQueen, chosenKing):
     gameLost = True
     gameWon = True
     if not mainTownHall.isDestroyed:
@@ -35,7 +35,9 @@ def checkGameStatus(mainMap, mainTownHall, arrayHuts, arrayCannons, mainKing, ar
     for everyCannon in arrayCannons:
         if not everyCannon.isDestroyed:
             gameWon = False
-    if not mainKing.isDead:
+    if chosenKing == 1 and not mainKing.isDead:
+        gameLost = False
+    elif chosenKing == 0 and not mainQueen.isDead:
         gameLost = False
     for everyBarbarian in arrayBarbarians:
         if not everyBarbarian.isDead:

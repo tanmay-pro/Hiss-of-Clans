@@ -123,18 +123,19 @@ class cannon(building):
         self.damage = damage
         self.range = range
 
-    def attack(self, mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons):
+    def attack(self, mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons, chosenKing):
         # The Cannon cannot attack aerial troops and hence balloons are not getting attacked
         attackX = self.positionX + mainMap.horizontalBoundary + 1
         attackY = self.positionY + mainMap.verticalBoundary + 1
         attackDone = False
-        if not mainKing.isDead:
-            distance = math.sqrt((attackX - mainKing.currPositionX)**2 + (attackY - mainKing.currPositionY)**2)
-            if distance <= self.range:
-                self.getColor(mainMap)
-                mainKing.deductHealth(self.damage, mainMap)
-                attackDone = True
-        if not attackDone:
+        if chosenKing == 1:
+            if not mainKing.isDead:
+                distance = math.sqrt((attackX - mainKing.currPositionX)**2 + (attackY - mainKing.currPositionY)**2)
+                if distance <= self.range:
+                    self.getColor(mainMap)
+                    mainKing.deductHealth(self.damage, mainMap)
+                    attackDone = True
+        else:
             if not mainQueen.isDead:
                 distance = math.sqrt((attackX - mainQueen.currPositionX)**2 + (attackY - mainQueen.currPositionY)**2)
                 if distance <= self.range:
@@ -179,20 +180,21 @@ class wizardTower(building):
         self.damage = damage        
         self.aoeRange = 3
 
-    def attack(self, mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons):
+    def attack(self, mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons, chosenKing):
         attackX = self.positionX + mainMap.horizontalBoundary + 1
         attackY = self.positionY + mainMap.verticalBoundary + 1
         attackDone = False
         attackedX = -1
         attackedY = -1
-        if not mainKing.isDead:
-            distance = math.sqrt(
-                (attackX - mainKing.currPositionX)**2 + (attackY - mainKing.currPositionY)**2)
-            if distance <= self.range:
-                attackDone = True
-                attackedX = mainKing.currPositionX
-                attackedY = mainKing.currPositionY
-        if not attackDone:
+        if chosenKing == 1:
+            if not mainKing.isDead:
+                distance = math.sqrt(
+                    (attackX - mainKing.currPositionX)**2 + (attackY - mainKing.currPositionY)**2)
+                if distance <= self.range:
+                    attackDone = True
+                    attackedX = mainKing.currPositionX
+                    attackedY = mainKing.currPositionY
+        else:
             if not mainQueen.isDead:
                 distance = math.sqrt(
                     (attackX - mainQueen.currPositionX)**2 + (attackY - mainQueen.currPositionY)**2)
