@@ -18,10 +18,12 @@ A terminal version of Clash of Clans implemented in Python from scratch without 
 * `7 8 9` are the three different keys for spawning the balloons.
 * Pressing `r` deploys the rage spell.
 * Pressing `h` deploys the healing spell.
+* Pressing `q` quits the game.
 * Pressing `l` will make the king use his leviathan axe (Damage on a larger area inside a particular range).
 * Pressing `k` makes the Queen use it's special Eagle Arrow attack (Damage in a larger range and at a farther distance).
 * To Win the game you have to strategically destroy all the non-wall buildings.
 * You will lose the game if all active troops die.
+* Psst: A secret key will make you directly go to the next level :)
 
 ## Usage of OOPS Concepts
 
