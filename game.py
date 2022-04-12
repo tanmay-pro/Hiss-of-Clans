@@ -226,10 +226,11 @@ if __name__ == "__main__":
             if(frames % attackFactorBuilding == 0):
                 for everyCannon in arrayCannons:
                     if not everyCannon.isDestroyed:
-                        everyCannon.changeColor(mainMap)
+                        everyCannon.spawnAgain(mainMap)
                         everyCannon.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)    
                 for everyTower in arrayTowers:
                     if not everyTower.isDestroyed:
+                        everyTower.spawnAgain(mainMap)
                         everyTower.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)
 
             if TIMEOUT_VAL > (time.time() - startTime):

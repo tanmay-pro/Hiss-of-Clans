@@ -105,7 +105,16 @@ class building:
                         if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
                             mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX]
                             mainMap.grid[i][j] = self.currBackColor + Fore.BLUE + mainMap.grid[i][j]
-                            self.currForeColor = Fore.BLUE  
+                            self.currForeColor = Fore.BLUE 
+
+    def spawnAgain(self, mainMap):
+        for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
+            for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
+                if self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX] != "\n":
+                    mainMap.grid[i][j] = self.texture[i-mainMap.verticalBoundary - self.positionY][j-mainMap.horizontalBoundary - self.positionX]
+                    mainMap.grid[i][j] = self.currBackColor + Fore.BLACK + mainMap.grid[i][j]
+                    self.currForeColor = Fore.BLACK
+ 
         
 # Each building below shows inheritance
 class cannon(building): 
