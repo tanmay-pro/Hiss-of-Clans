@@ -52,8 +52,8 @@
     "balloon_attack": 4,
     "balloon_speed": 2,
     "axe_range": 10,
-    "max_barbarians": 20,
-    "max_archers": 20,
+    "max_barbarians": 15,
+    "max_archers": 10,
     "max_balloons": 6,
     "timeout_val": 0.1,
     "max_spells": 2
