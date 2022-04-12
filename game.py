@@ -78,16 +78,14 @@ if __name__ == "__main__":
         WALL_STARTING2Y = data['wall_starting2y']
         WALL_HEALTH = data['wall_health']
         CANNON_1X = data['cannon_1x']
-        CANNON_1Y = data['cannon_1y']
-        CANNON_2X = data['cannon_2x']
-        CANNON_2Y = data['cannon_2y']
+        CANNON_Y = data['cannon_y']
+        NUMBER_CANNONS = data['number_cannons']
         CANNON_HEALTH = data['cannon_health']
         CANNON_DAMAGE = data['cannon_damage']
         CANNON_RANGE = data['cannon_range']
         TOWER_1X = data['tower_1x']
-        TOWER_1Y = data['tower_1y']
-        TOWER_2X = data['tower_2x']
-        TOWER_2Y = data['tower_2y']
+        TOWER_Y = data['tower_y']
+        NUMBER_TOWERS = data['number_towers']
         TOWER_HEALTH = data['tower_health']
         TOWER_DAMAGE = data['tower_damage']
         TOWER_RANGE = data['tower_range']
@@ -170,10 +168,8 @@ if __name__ == "__main__":
         arrayCannons = []
         texture, heightTexture, maxWidthTexture = getTexture(
             "src/textures/cannon.txt")
-        cannon1 = cannon(CANNON_1X, CANNON_1Y, CANNON_HEALTH, CANNON_DAMAGE, CANNON_RANGE)
-        cannon2 = cannon(CANNON_2X, CANNON_2Y, CANNON_HEALTH, CANNON_DAMAGE, CANNON_RANGE)
-        arrayCannons.append(cannon1)
-        arrayCannons.append(cannon2)
+        for i in range(0, NUMBER_CANNONS):
+            arrayCannons.append(cannon(CANNON_1X  + 10*i , CANNON_Y, CANNON_HEALTH, CANNON_DAMAGE, CANNON_RANGE))
         for Cannon in arrayCannons:
             Cannon.assignHeight(heightTexture)
             Cannon.assignmaxWidth(maxWidthTexture)
@@ -183,10 +179,8 @@ if __name__ == "__main__":
         arrayTowers = []
         texture, heightTexture, maxWidthTexture = getTexture(
             "src/textures/tower.txt")
-        tower1 = wizardTower(TOWER_1X, TOWER_1Y, TOWER_HEALTH, TOWER_DAMAGE, TOWER_RANGE)
-        tower2 = wizardTower(TOWER_2X, TOWER_2Y, TOWER_HEALTH, TOWER_DAMAGE, TOWER_RANGE)
-        arrayTowers.append(tower1)
-        arrayTowers.append(tower2)
+        for i in range(0, NUMBER_TOWERS):
+            arrayTowers.append(wizardTower(TOWER_1X + 10*i, TOWER_Y, TOWER_HEALTH, TOWER_DAMAGE, TOWER_RANGE))
         for Tower in arrayTowers:
             Tower.assignHeight(heightTexture)
             Tower.assignmaxWidth(maxWidthTexture)
@@ -216,7 +210,6 @@ if __name__ == "__main__":
             print("Number of archers you can still spawn: " + str(MAX_ARCHERS -currArchers))
             print("Number of balloons you can still spawn: " + str(MAX_BALLOONS -currBalloons))
             print("Number of spells you can still use: " + str(MAX_SPELLS - currSpellsUsed))
-            # print("Chosen King value = " + str(chosenKing))
             print("Current level = " + str(currLevel))
             
             if frames % 2 ==0:
