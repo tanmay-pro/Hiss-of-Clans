@@ -302,43 +302,50 @@ class archerQueen(movingObject):
             attackX -= 8
         elif self.previousMove == "w":
             attackY -= 8
+        
+        # If we want to attack irrespective of building present 8 tiles far
 
-        if not townHall.isDestroyed:
-            if townHall.checkUnit(mainMap, attackX, attackY):
-                # townHall.deductHealth(self.damage, mainMap)
-                self.performAttack(mainMap, townHall, huts,
-                                   walls, cannons, towers, attackX, attackY)
-        for everyHut in huts:
-            if not everyHut.isDestroyed:
-                if everyHut.checkUnit(mainMap, attackX, attackY):
-                    # everyHut.deductHealth(self.damage, mainMap)
-                    self.performAttack(mainMap, townHall, huts,
-                                       walls, cannons, towers, attackX, attackY)
-                    break
+        self.performAttack(mainMap, townHall, huts, walls, cannons, towers, attackX, attackY)
 
-        for everyWall in walls:
-            if not everyWall.isDestroyed:
-                if everyWall.checkUnit(mainMap, attackX, attackY):
-                    # everyWall.deductHealth(self.damage, mainMap)
-                    self.performAttack(mainMap, townHall, huts,
-                                       walls, cannons, towers, attackX, attackY)
-                    break
+        # If we want to attack in AoE only if building is present 8 tiles far, then use below code 
 
-        for everyCannon in cannons:
-            if not everyCannon.isDestroyed:
-                if everyCannon.checkUnit(mainMap, attackX, attackY):
-                    # everyCannon.deductHealth(self.damage, mainMap)
-                    self.performAttack(mainMap, townHall, huts,
-                                       walls, cannons, towers, attackX, attackY)
-                    break
 
-        for everyTower in towers:
-            if not everyTower.isDestroyed:
-                if everyTower.checkUnit(mainMap, attackX, attackY):
-                    # everyTower.deductHealth(self.damage, mainMap)
-                    self.performAttack(mainMap, townHall, huts,
-                                       walls, cannons, towers, attackX, attackY)
-                    break
+        # if not townHall.isDestroyed:
+        #     if townHall.checkUnit(mainMap, attackX, attackY):
+        #         # townHall.deductHealth(self.damage, mainMap)
+        #         self.performAttack(mainMap, townHall, huts,
+        #                            walls, cannons, towers, attackX, attackY)
+        # for everyHut in huts:
+        #     if not everyHut.isDestroyed:
+        #         if everyHut.checkUnit(mainMap, attackX, attackY):
+        #             # everyHut.deductHealth(self.damage, mainMap)
+        #             self.performAttack(mainMap, townHall, huts,
+        #                                walls, cannons, towers, attackX, attackY)
+        #             break
+
+        # for everyWall in walls:
+        #     if not everyWall.isDestroyed:
+        #         if everyWall.checkUnit(mainMap, attackX, attackY):
+        #             # everyWall.deductHealth(self.damage, mainMap)
+        #             self.performAttack(mainMap, townHall, huts,
+        #                                walls, cannons, towers, attackX, attackY)
+        #             break
+
+        # for everyCannon in cannons:
+        #     if not everyCannon.isDestroyed:
+        #         if everyCannon.checkUnit(mainMap, attackX, attackY):
+        #             # everyCannon.deductHealth(self.damage, mainMap)
+        #             self.performAttack(mainMap, townHall, huts,
+        #                                walls, cannons, towers, attackX, attackY)
+        #             break
+
+        # for everyTower in towers:
+        #     if not everyTower.isDestroyed:
+        #         if everyTower.checkUnit(mainMap, attackX, attackY):
+        #             # everyTower.deductHealth(self.damage, mainMap)
+        #             self.performAttack(mainMap, townHall, huts,
+        #                                walls, cannons, towers, attackX, attackY)
+        #             break
 
 
 class barbarian(movingObject):

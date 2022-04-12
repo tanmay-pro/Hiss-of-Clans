@@ -49,7 +49,7 @@
     "archer_health": 5,
     "archer_speed": 2,
     "archer_attack": 1,
-    "archer_range": 13,
+    "archer_range": 10,
     "balloon_health": 10,
     "balloon_attack": 4,
     "balloon_speed": 2,
