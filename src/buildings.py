@@ -1,3 +1,4 @@
+from pandas import array
 from src.map import *
 import math
 
@@ -45,6 +46,17 @@ class building:
         for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
             for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
                 if math.sqrt((i - posY)**2 + (j - posX)**2) <= specRange:
+                    present = True
+        if present:
+            return True
+        else:
+            return False
+
+    def checkIfUnitInRangeSquare(self, mainMap, posX, posY, specRange):
+        present = False
+        for i in range(mainMap.verticalBoundary + self.positionY, self.height + mainMap.verticalBoundary + self.positionY):
+            for j in range(mainMap.horizontalBoundary + self.positionX, len(self.texture[i - mainMap.verticalBoundary - self.positionY]) + mainMap.horizontalBoundary + self.positionX):
+                if abs(i - posY) <= specRange/2 and abs(j - posX) <= specRange/2:
                     present = True
         if present:
             return True
@@ -233,37 +245,30 @@ class wizardTower(building):
                         attackDone = True
                         break
         if attackDone:
-            self.performAttack(mainMap, attackedX, attackedY, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)
+            self.performAttack(mainMap, attackedX, attackedY, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons, chosenKing)
         
-    def performAttack(self, mainMap, posX, posY, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons):
+    def performAttack(self, mainMap, posX, posY, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons, chosenKing):
         attackX = posX
         attackY = posY
         self.getColor(mainMap)
-        if not mainKing.isDead:
-            distance = math.sqrt(
-                (attackX - mainKing.currPositionX)**2 + (attackY - mainKing.currPositionY)**2)
-            if distance <= self.aoeRange:
-                mainKing.deductHealth(self.damage, mainMap)
-        if not mainQueen.isDead:
-            distance = math.sqrt(
-                (attackX - mainQueen.currPositionX)**2 + (attackY - mainQueen.currPositionY)**2)
-            if distance <= self.aoeRange:
-                mainQueen.deductHealth(self.damage, mainMap)
+        if chosenKing == 1:
+            if not mainKing.isDead:
+                if abs(attackX - mainKing.currPositionX) <= self.aoeRange/2 and abs(attackY - mainKing.currPositionY) <= self.aoeRange/2:
+                    mainKing.deductHealth(self.damage, mainMap)
+        else:
+            if not mainQueen.isDead:
+                if abs(attackX - mainQueen.currPositionX) <= self.aoeRange/2 and abs(attackY - mainQueen.currPositionY) <= self.aoeRange/2:
+                    mainQueen.deductHealth(self.damage, mainMap)
+
         for i in range(len(arrayBalloons)):
             if not arrayBalloons[i].isDead:
-                distance = math.sqrt(
-                    (attackX - arrayBalloons[i].currPositionX)**2 + (attackY - arrayBalloons[i].currPositionY)**2)
-                if distance <= self.aoeRange:
+                if abs(attackX - arrayBalloons[i].currPositionX) <= self.aoeRange/2 and abs(attackY - arrayBalloons[i].currPositionY) <= self.aoeRange/2:
                     arrayBalloons[i].deductHealth(self.damage, mainMap)
         for i in range(len(arrayBarbarians)):
             if not arrayBarbarians[i].isDead:
-                distance = math.sqrt(
-                    (attackX - arrayBarbarians[i].currPositionX)**2 + (attackY - arrayBarbarians[i].currPositionY)**2)
-                if distance <= self.aoeRange:
+                if abs(attackX - arrayBarbarians[i].currPositionX) <= self.aoeRange/2 and abs(attackY - arrayBarbarians[i].currPositionY) <= self.aoeRange/2:
                     arrayBarbarians[i].deductHealth(self.damage, mainMap)
         for i in range(len(arrayArchers)):
             if not arrayArchers[i].isDead:
-                distance = math.sqrt(
-                    (attackX - arrayArchers[i].currPositionX)**2 + (attackY - arrayArchers[i].currPositionY)**2)
-                if distance <= self.aoeRange:
+                if abs(attackX - arrayArchers[i].currPositionX) <= self.aoeRange/2 and abs(attackY - arrayArchers[i].currPositionY) <= self.aoeRange/2:
                     arrayArchers[i].deductHealth(self.damage, mainMap)

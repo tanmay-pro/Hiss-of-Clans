@@ -31,6 +31,7 @@ if __name__ == "__main__":
         currArchers  = 0
         currBalloons = 0
         currSpellsUsed = 0
+        queenArrow = False
         chosenKing = -1
         if char == "K" or char == "k":
             chosenKing = 1
@@ -211,6 +212,11 @@ if __name__ == "__main__":
             print("Number of balloons you can still spawn: " + str(MAX_BALLOONS -currBalloons))
             print("Number of spells you can still use: " + str(MAX_SPELLS - currSpellsUsed))
             print("Current level = " + str(currLevel))
+
+
+            if queenArrow == True and time.time() - start > 1:
+                queenArrow = False
+                mainQueen.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
             
             if frames % 2 ==0:
                 for everyBarbarian in arrayBarbarians:
@@ -329,8 +335,8 @@ if __name__ == "__main__":
             
             elif ch == "k":
                 if not mainQueen.isDead and chosenKing == 0:
-                    time.sleep(1)
-                    mainQueen.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
+                    start = time.time()
+                    queenArrow = True
 
             elif ch== "p":
                 currLevel += 1

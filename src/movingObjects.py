@@ -272,44 +272,44 @@ class archerQueen(movingObject):
 
     def performAttack(self, mainMap, townHall, huts, walls, cannons, towers, posX, posY):
         if not townHall.isDestroyed:
-            if townHall.checkIfUnitInRange(mainMap, posX, posY, self.aoeRange):
+            if townHall.checkIfUnitInRangeSquare(mainMap, posX, posY, self.aoeRange):
                 townHall.deductHealth(self.damage, mainMap)
         for everyHut in huts:
             if not everyHut.isDestroyed:
-                if everyHut.checkIfUnitInRange(mainMap, posX, posY, self.aoeRange):
+                if everyHut.checkIfUnitInRangeSquare(mainMap, posX, posY, self.aoeRange):
                     everyHut.deductHealth(self.damage, mainMap)
         for everyWall in walls:
             if not everyWall.isDestroyed:
-                if everyWall.checkIfUnitInRange(mainMap, posX, posY, self.aoeRange):
+                if everyWall.checkIfUnitInRangeSquare(mainMap, posX, posY, self.aoeRange):
                     everyWall.deductHealth(self.damage, mainMap)
         for everyCannon in cannons:
             if not everyCannon.isDestroyed:
-                if everyCannon.checkIfUnitInRange(mainMap, posX, posY, self.aoeRange):
+                if everyCannon.checkIfUnitInRangeSquare(mainMap, posX, posY, self.aoeRange):
                     everyCannon.deductHealth(self.damage, mainMap)
         for everyTower in towers:
             if not everyTower.isDestroyed:
-                if everyTower.checkIfUnitInRange(mainMap, posX, posY, self.aoeRange):
+                if everyTower.checkIfUnitInRangeSquare(mainMap, posX, posY, self.aoeRange):
                     everyTower.deductHealth(self.damage, mainMap)
 
     def performAttackMajor(self, mainMap, townHall, huts, walls, cannons, towers, posX, posY):
         if not townHall.isDestroyed:
-            if townHall.checkIfUnitInRange(mainMap, posX, posY, self.aoeRangeMajor):
+            if townHall.checkIfUnitInRangeSquare(mainMap, posX, posY, self.aoeRangeMajor):
                 townHall.deductHealth(self.damage, mainMap)
         for everyHut in huts:
             if not everyHut.isDestroyed:
-                if everyHut.checkIfUnitInRange(mainMap, posX, posY, self.aoeRangeMajor):
+                if everyHut.checkIfUnitInRangeSquare(mainMap, posX, posY, self.aoeRangeMajor):
                     everyHut.deductHealth(self.damage, mainMap)
         for everyWall in walls:
             if not everyWall.isDestroyed:
-                if everyWall.checkIfUnitInRange(mainMap, posX, posY, self.aoeRangeMajor):
+                if everyWall.checkIfUnitInRangeSquare(mainMap, posX, posY, self.aoeRangeMajor):
                     everyWall.deductHealth(self.damage, mainMap)
         for everyCannon in cannons:
             if not everyCannon.isDestroyed:
-                if everyCannon.checkIfUnitInRange(mainMap, posX, posY, self.aoeRangeMajor):
+                if everyCannon.checkIfUnitInRangeSquare(mainMap, posX, posY, self.aoeRangeMajor):
                     everyCannon.deductHealth(self.damage, mainMap)
         for everyTower in towers:
             if not everyTower.isDestroyed:
-                if everyTower.checkIfUnitInRange(mainMap, posX, posY, self.aoeRangeMajor):
+                if everyTower.checkIfUnitInRangeSquare(mainMap, posX, posY, self.aoeRangeMajor):
                     everyTower.deductHealth(self.damage, mainMap)
 
     def attack(self, mainMap, townHall, huts, walls, cannons, towers):
