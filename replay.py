@@ -1,4 +1,3 @@
-from ast import Global
 from multiprocessing.spawn import spawn_main
 from matplotlib.pyplot import bar
 import numpy as np
@@ -20,23 +19,34 @@ inputs = []
 globalFrames = 0
 colorama.init(autoreset=True)
 currLevel = 1
-
 if __name__ == "__main__":
     num = int(input("Enter game number: "))
     with open('replays/replay.json', 'r+') as f:
         data = json.load(f)
-        print(data)
     inputs = data[num]
     while currLevel != 4:
+        os.system("cls" if os.name == "nt" else "clear")
+        print("What do you want to play with King(K) or Queen(Q)? Press K for King and Q for Queen\n")
         orig_settings = termios.tcgetattr(sys.stdin)
         tty.setcbreak(sys.stdin)
-        os.system("cls" if os.name == "nt" else "clear")
         gameStatus = "playing"
+
         currBarbarians = 0
         currArchers  = 0
         currBalloons = 0
         currSpellsUsed = 0
+        queenArrow = False
         chosenKing = -1
+        char = inputs[globalFrames]
+        globalFrames += 1
+        if char == "K" or char == "k":
+            chosenKing = 1
+        elif char == "Q" or char == "q":
+            chosenKing = 0
+        else:
+            print("Invalid input. By default, king has been selected!")
+            time.sleep(2)
+            chosenKing = 1
         frames = 0
         attackFactorBuilding = 1
 
@@ -75,16 +85,14 @@ if __name__ == "__main__":
         WALL_STARTING2Y = data['wall_starting2y']
         WALL_HEALTH = data['wall_health']
         CANNON_1X = data['cannon_1x']
-        CANNON_1Y = data['cannon_1y']
-        CANNON_2X = data['cannon_2x']
-        CANNON_2Y = data['cannon_2y']
+        CANNON_Y = data['cannon_y']
+        NUMBER_CANNONS = data['number_cannons']
         CANNON_HEALTH = data['cannon_health']
         CANNON_DAMAGE = data['cannon_damage']
         CANNON_RANGE = data['cannon_range']
         TOWER_1X = data['tower_1x']
-        TOWER_1Y = data['tower_1y']
-        TOWER_2X = data['tower_2x']
-        TOWER_2Y = data['tower_2y']
+        TOWER_Y = data['tower_y']
+        NUMBER_TOWERS = data['number_towers']
         TOWER_HEALTH = data['tower_health']
         TOWER_DAMAGE = data['tower_damage']
         TOWER_RANGE = data['tower_range']
@@ -107,26 +115,25 @@ if __name__ == "__main__":
 
         mainMap = map(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, GAME_HORIZONTAL_BOUNDARY, GAME_VERTICAL_BOUNDARY)
         mainMap.createMap()
-
         mainKing = king(KING_STARTING_X, KING_STARTING_Y, KING_HEALTH, KING_SPEED, KING_ATTACK)
-        texture, heightTexture, maxWidthTexture = getTexture(
-            "src/textures/king.txt")
+        texture, heightTexture, maxWidthTexture = getTexture("src/textures/king.txt")
         mainKing.assignHeight(heightTexture)
         mainKing.assignmaxWidth(maxWidthTexture)
         mainKing.assignTexture(texture)
-        mainKing.assignInitialPosition(mainMap)
         mainKing.isKing = True
-        chosenKing = 1
-
+        
         mainQueen = archerQueen(QUEEN_STARTING_X, QUEEN_STARTING_Y, QUEEN_HEALTH, QUEEN_SPEED, QUEEN_ATTACK)
-        texture, heightTexture, maxWidthTexture = getTexture(
-            "src/textures/archerQueen.txt")
+        texture, heightTexture, maxWidthTexture = getTexture("src/textures/archerQueen.txt")
         mainQueen.assignHeight(heightTexture)
         mainQueen.assignmaxWidth(maxWidthTexture)
         mainQueen.assignTexture(texture)
-        mainQueen.assignInitialPosition(mainMap)
         mainQueen.isKing = True
 
+        if chosenKing == 1:
+            mainKing.assignInitialPosition(mainMap)
+        else:            
+            mainQueen.assignInitialPosition(mainMap)
+        
         mainTownHall = townHall(TOWN_X_POSITION, TOWN_Y_POSITION, TOWN_HEALTH)
         texture, heightTexture, maxWidthTexture = getTexture(
             "src/textures/townHall.txt")
@@ -168,10 +175,8 @@ if __name__ == "__main__":
         arrayCannons = []
         texture, heightTexture, maxWidthTexture = getTexture(
             "src/textures/cannon.txt")
-        cannon1 = cannon(CANNON_1X, CANNON_1Y, CANNON_HEALTH, CANNON_DAMAGE, CANNON_RANGE)
-        cannon2 = cannon(CANNON_2X, CANNON_2Y, CANNON_HEALTH, CANNON_DAMAGE, CANNON_RANGE)
-        arrayCannons.append(cannon1)
-        arrayCannons.append(cannon2)
+        for i in range(0, NUMBER_CANNONS):
+            arrayCannons.append(cannon(CANNON_1X  + 10*i , CANNON_Y, CANNON_HEALTH, CANNON_DAMAGE, CANNON_RANGE))
         for Cannon in arrayCannons:
             Cannon.assignHeight(heightTexture)
             Cannon.assignmaxWidth(maxWidthTexture)
@@ -181,10 +186,8 @@ if __name__ == "__main__":
         arrayTowers = []
         texture, heightTexture, maxWidthTexture = getTexture(
             "src/textures/tower.txt")
-        tower1 = wizardTower(TOWER_1X, TOWER_1Y, TOWER_HEALTH, TOWER_DAMAGE, TOWER_RANGE)
-        tower2 = wizardTower(TOWER_2X, TOWER_2Y, TOWER_HEALTH, TOWER_DAMAGE, TOWER_RANGE)
-        arrayTowers.append(tower1)
-        arrayTowers.append(tower2)
+        for i in range(0, NUMBER_TOWERS):
+            arrayTowers.append(wizardTower(TOWER_1X + 10*i, TOWER_Y, TOWER_HEALTH, TOWER_DAMAGE, TOWER_RANGE))
         for Tower in arrayTowers:
             Tower.assignHeight(heightTexture)
             Tower.assignmaxWidth(maxWidthTexture)
@@ -202,19 +205,24 @@ if __name__ == "__main__":
         
         while gameStatus == "playing":
             frames += 1
-            globalFrames +=1
             startTime = time.time()
             os.system("cls" if os.name == "nt" else "clear")
             mainMap.drawMap2()
             if not mainKing.isDead:
-                mainKing.displayHealth()
-                mainQueen.displayHealth()
+                if chosenKing == 1:
+                    mainKing.displayHealth()
+                else:
+                    mainQueen.displayHealth()
             print("Number of barbarians you can still spawn: " + str(MAX_BARBARIANS -currBarbarians))
             print("Number of archers you can still spawn: " + str(MAX_ARCHERS -currArchers))
             print("Number of balloons you can still spawn: " + str(MAX_BALLOONS -currBalloons))
             print("Number of spells you can still use: " + str(MAX_SPELLS - currSpellsUsed))
-            print("Chosen King value = " + str(chosenKing))
             print("Current level = " + str(currLevel))
+
+
+            if queenArrow == True and time.time() - start > 1:
+                queenArrow = False
+                mainQueen.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
             
             if frames % 2 ==0:
                 for everyBarbarian in arrayBarbarians:
@@ -234,17 +242,16 @@ if __name__ == "__main__":
                 for everyCannon in arrayCannons:
                     if not everyCannon.isDestroyed:
                         everyCannon.spawnAgain(mainMap)
-                        everyCannon.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)    
+                        everyCannon.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons, chosenKing)    
                 for everyTower in arrayTowers:
                     if not everyTower.isDestroyed:
                         everyTower.spawnAgain(mainMap)
-                        everyTower.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons)
+                        everyTower.attack(mainMap, mainKing, mainQueen, arrayBarbarians, arrayArchers, arrayBalloons, chosenKing)
 
             if TIMEOUT_VAL > (time.time() - startTime):
                 time.sleep(TIMEOUT_VAL - (time.time() - startTime))
-            # ch = input_to(Get())
-            # inputs.append(ch)
-            ch = inputs[globalFrames - 1]
+            ch = inputs[globalFrames]
+            globalFrames += 1
             
             if ch == "w" or ch == "a" or ch == "s" or ch == "d":
                 if chosenKing == 1:                
@@ -253,12 +260,6 @@ if __name__ == "__main__":
                 else:
                     if not mainQueen.isDead:
                         mainQueen.move(ch, mainMap)
-
-            elif ch == "t":
-                if chosenKing == 1:
-                    chosenKing = 0
-                else:
-                    chosenKing = 1
 
             elif ch == "q":
                 gameStatus = "quit"
@@ -334,14 +335,14 @@ if __name__ == "__main__":
                     if not everyBarbarian.isDead:
                         everyBarbarian.castSpell(Spell)
             
-            elif ch == "l":
+            elif ch == "l" and chosenKing == 1:
                 if not mainKing.isDead:
                     mainKing.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers, AXE_RANGE)    
             
             elif ch == "k":
-                if not mainQueen.isDead:
-                    time.sleep(1)
-                    mainQueen.attackMajor(mainMap, mainTownHall, arrayHuts, arrayWalls, arrayCannons, arrayTowers)
+                if not mainQueen.isDead and chosenKing == 0:
+                    start = time.time()
+                    queenArrow = True
 
             elif ch== "p":
                 currLevel += 1
@@ -350,14 +351,13 @@ if __name__ == "__main__":
             sys.stdin.flush()
             sys.stdout.flush()
             returnVal = checkGameStatus(
-                    mainMap, mainTownHall, arrayHuts, arrayCannons, mainKing, arrayBarbarians)
+                    mainMap, mainTownHall, arrayHuts, arrayCannons, mainKing, arrayBarbarians, mainQueen, chosenKing)
             if returnVal == 0:
                 gameStatus = "lost"
             elif returnVal == 1:
                 currLevel += 1
                 break
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)
-        f.close()
         if gameStatus != "playing":
             break
         
@@ -370,10 +370,3 @@ if __name__ == "__main__":
     elif gameStatus == "quit":
         os.system("cls" if os.name == "nt" else "clear")
         print("You quit!")
-
-    with open('replays/replay.json', 'r+') as f:
-        data = json.loads(f.read())
-        data.append(inputs)
-            
-    with open('replays/replay.json', 'w') as f:
-        json.dump(data, f)
