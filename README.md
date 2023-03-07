@@ -35,3 +35,5 @@ A terminal version of Clash of Clans implemented in Python from scratch without 
 ## Replay Functionality
 
 * Input of every frame gets stored in the replay.json file inside the replays folder. On entering the game number (0 based indexing), the particular game gets replayed on the screen move by move. This feature could be implemented because of the deterministic nature of the game.
+
+* To run replay of any game, run `python3 replay.py`. The code will prompt you to enter the game number. Enter the game number and the game will be replayed on the screen.
